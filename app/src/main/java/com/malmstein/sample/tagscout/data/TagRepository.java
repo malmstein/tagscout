@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.malmstein.sample.tagscout.data.model.Tag;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,10 +53,15 @@ public class TagRepository implements TagDataSource {
             return tags;
         } else {
             tags = tagRemoteSource.getTags();
-            for (Tag tag : tags) {
-                cachedTags.put(tag.getId(), tag);
+            if (tags != null){
+                cachedTags = new LinkedHashMap<>();
+                for (Tag tag : tags) {
+                    cachedTags.put(tag.getId(), tag);
+                }
+                return tags;
+            } else {
+                return null;
             }
-            return tags;
         }
 
     }

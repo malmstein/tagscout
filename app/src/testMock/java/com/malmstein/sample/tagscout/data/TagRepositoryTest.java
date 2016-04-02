@@ -33,10 +33,6 @@ public class TagRepositoryTest {
 
         // Get a reference to the class under test
         tagRepository = TagRepository.getInstance(tagRemoteDataSource);
-
-        // Set two sample Tags
-        TAGS.add(new Tag(1, "text1", "color1"));
-        TAGS.add(new Tag(2, "text2", "color2"));
     }
 
     @After
@@ -68,6 +64,9 @@ public class TagRepositoryTest {
     @Test
     public void getTasksFromRemoteDataSource_returnsListOfTags() {
         // When the remote data source data available
+        // Set two sample Tags
+        TAGS.add(new Tag(1, "text1", "color1"));
+        TAGS.add(new Tag(2, "text2", "color2"));
         when(tagRemoteDataSource.getTags()).thenReturn(TAGS);
 
         // When calling getTags in the repository
