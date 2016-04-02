@@ -1,3 +1,12 @@
+# java dumps during errors
+*.hprof
+
+/.idea/
+/.idea/workspace.xml
+/.idea/libraries
+*.iml
+.DS_Store
+
 # Built application files
 *.apk
 *.ap_
@@ -25,8 +34,5 @@ proguard/
 # Log Files
 *.log
 
-# Android Studio Navigation editor temp files
-.navigation/
-
-# Android Studio captures folder
+# memory dumps
 captures/
