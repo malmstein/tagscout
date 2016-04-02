@@ -55,7 +55,7 @@ public class TagRepositoryTest {
     }
 
     @Test
-    public void getTasks_requestsAllTasksFromLocalDataSource() {
+    public void getTasks_requestsAllTasksFromRemoteDataSource() {
         // When tasks are requested from the tasks repository
         tagRepository.getTags(loadTagsCallback);
 
