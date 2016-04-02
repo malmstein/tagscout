@@ -43,6 +43,10 @@ public class TagRepositoryTest {
 
         // Get a reference to the class under test
         tagRepository = TagRepository.getInstance(tagRemoteDataSource);
+
+        // Set two sample Tags
+        TAGS.add(new Tag(1, "text1", "color1"));
+        TAGS.add(new Tag(2, "text2", "color2"));
     }
 
     @After
@@ -89,9 +93,6 @@ public class TagRepositoryTest {
     }
 
     private void setTagsAvailable(TagDataSource dataSource) {
-        TAGS.add(new Tag(1, "text1", "color1"));
-        TAGS.add(new Tag(2, "text2", "color2"));
-
         verify(dataSource).getTags(tagsCallbackArgumentCaptor.capture());
         tagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
     }
