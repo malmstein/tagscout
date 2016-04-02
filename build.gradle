@@ -31,6 +31,7 @@ ext {
 
     // App dependencies
     supportLibraryVersion = '23.2.1'
+    gsonVersion = '2.6.2'
     junitVersion = '4.12'
     mockitoVersion = '1.10.19'
     hamcrestVersion = '1.3'
