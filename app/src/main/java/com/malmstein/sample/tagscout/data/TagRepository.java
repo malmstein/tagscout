@@ -4,7 +4,9 @@ import android.support.annotation.NonNull;
 
 import com.malmstein.sample.tagscout.data.model.Tag;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Concrete implementation to load tasks from the data sources
@@ -14,6 +16,10 @@ public class TagRepository implements TagDataSource {
     private static TagRepository INSTANCE = null;
 
     private final TagDataSource tagRemoteSource;
+    /**
+     * This variable has package local visibility so it can be accessed from tests.
+     */
+    Map<Integer, Tag> cachedTags;
 
     /**
      * Returns the single instance of this class, creating it if necessary.
@@ -33,19 +39,29 @@ public class TagRepository implements TagDataSource {
         tagRemoteSource = tagRemoteDataSource;
     }
 
+    /**
+     * Gets tasks from cache or remote data source, whichever is available first.
+     * This is done synchronously because it's used by the {@link com.malmstein.sample.tagscout.tags.TagsLoader},
+     * which implements the async mechanism.
+     */
     @Override
-    public void getTags(@NonNull final LoadTagsCallback callback) {
-        tagRemoteSource.getTags(new LoadTagsCallback() {
-            @Override
-            public void onTagsLoaded(List<Tag> tags) {
-                callback.onTagsLoaded(tags);
+    public List<Tag> getTags() {
+        // Grab remote data if cache is empty
+        List<Tag> tags = getCachedTags();
+        if (cachedTags != null) {
+            return tags;
+        } else {
+            tags = tagRemoteSource.getTags();
+            for (Tag tag : tags) {
+                cachedTags.put(tag.getId(), tag);
             }
+            return tags;
+        }
 
-            @Override
-            public void onDataNotAvailable() {
-                callback.onDataNotAvailable();
-            }
-        });
+    }
+
+    private List<Tag> getCachedTags() {
+        return cachedTags == null ? null : new ArrayList<>(cachedTags.values());
     }
 
     /**

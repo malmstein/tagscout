@@ -1,7 +1,5 @@
 package com.malmstein.sample.tagscout.data;
 
-import android.support.annotation.NonNull;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.malmstein.sample.tagscout.data.model.Tag;
@@ -29,16 +27,15 @@ public class FakeTagRemoteDataSource implements TagDataSource {
     }
 
     @Override
-    public void getTags(@NonNull LoadTagsCallback callback) {
+    public List<Tag> getTags() {
         List<Tag> value;
         Type listType = new TypeToken<ArrayList<Tag>>() {}.getType();
         try {
             value = gson.fromJson(FakeJson.tags, listType);
         } catch (Exception e) {
-            callback.onDataNotAvailable();
-            return;
+            return null;
         }
-        callback.onTagsLoaded(value);
+        return value;
     }
 
 }

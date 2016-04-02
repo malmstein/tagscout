@@ -8,13 +8,13 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Matchers.any;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class TagRepositoryTest {
 
@@ -24,16 +24,6 @@ public class TagRepositoryTest {
 
     @Mock
     private TagDataSource tagRemoteDataSource;
-
-    @Mock
-    private TagDataSource.LoadTagsCallback loadTagsCallback;
-
-    /**
-     * {@link ArgumentCaptor} is a powerful Mockito API to capture argument values and use them to
-     * perform further actions or assertions on them.
-     */
-    @Captor
-    private ArgumentCaptor<TagDataSource.LoadTagsCallback> tagsCallbackArgumentCaptor;
 
     @Before
     public void setupTasksRepository() {
@@ -57,44 +47,36 @@ public class TagRepositoryTest {
     @Test
     public void getTasks_requestsAllTasksFromRemoteDataSource() {
         // When tasks are requested from the tasks repository
-        tagRepository.getTags(loadTagsCallback);
+        tagRepository.getTags();
 
         // Then tags are loaded from the remote data source
-        verify(tagRemoteDataSource).getTags(any(TagDataSource.LoadTagsCallback.class));
+        verify(tagRemoteDataSource).getTags();
     }
 
     @Test
     public void getTasksWithRemoteDataSourceUnavailable_noDataIsAvailable() {
+        // When the remote data source has no data available
+        when(tagRemoteDataSource.getTags()).thenReturn(null);
+
         // When calling getTags in the repository
-        tagRepository.getTags(loadTagsCallback);
+        List<Tag> returnedTags = tagRepository.getTags();
 
-        // And the remote data source has no data available
-        setTagsNotAvailable(tagRemoteDataSource);
-
-        // Verify the tasks from the local data source are returned
-        verify(loadTagsCallback).onDataNotAvailable();
+        // Then the returned tags are null
+        assertNull(returnedTags);
     }
 
     @Test
     public void getTasksFromRemoteDataSource_returnsListOfTags() {
+        // When the remote data source data available
+        when(tagRemoteDataSource.getTags()).thenReturn(TAGS);
+
         // When calling getTags in the repository
-        tagRepository.getTags(loadTagsCallback);
+        List<Tag> returnedTags = tagRepository.getTags();
 
-        // And the remote data source data available
-        setTagsAvailable(tagRemoteDataSource);
-
-        // Verify the tasks from the local data source are returned
-        verify(loadTagsCallback).onTagsLoaded(TAGS);
+        // Verify the tasks from the remote data source are returned
+        assertEquals(2, returnedTags.size());
     }
 
-    private void setTagsNotAvailable(TagDataSource dataSource) {
-        verify(dataSource).getTags(tagsCallbackArgumentCaptor.capture());
-        tagsCallbackArgumentCaptor.getValue().onDataNotAvailable();
-    }
 
-    private void setTagsAvailable(TagDataSource dataSource) {
-        verify(dataSource).getTags(tagsCallbackArgumentCaptor.capture());
-        tagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
-    }
 
 }
