@@ -11,10 +11,13 @@ public class TagsPresenter implements TagsContract.Presenter{
     private final UseCaseHandler useCaseHandler;
     @NonNull
     private final RetrieveTagsUseCase retrieveTagsUseCase;
+    @NonNull
+    private final TagsContract.View tagsView;
 
-    public TagsPresenter(@NonNull UseCaseHandler useCaseHandler, @NonNull RetrieveTagsUseCase retrieveTagsUseCase){
+    public TagsPresenter(@NonNull UseCaseHandler useCaseHandler, @NonNull RetrieveTagsUseCase retrieveTagsUseCase, @NonNull TagsContract.View tagsView){
         this.useCaseHandler = useCaseHandler;
         this.retrieveTagsUseCase = retrieveTagsUseCase;
+        this.tagsView = tagsView;
     }
 
     @Override
@@ -22,12 +25,12 @@ public class TagsPresenter implements TagsContract.Presenter{
         useCaseHandler.execute(retrieveTagsUseCase, null, new UseCase.UseCaseCallback<RetrieveTagsUseCase.ResponseValue>() {
             @Override
             public void onSuccess(RetrieveTagsUseCase.ResponseValue response) {
-                // send data to UI
+                tagsView.showTags(response.getTags());
             }
 
             @Override
             public void onError(Error error) {
-                // show error on UI
+                tagsView.showLoadingTagsError();
             }
         });
     }
