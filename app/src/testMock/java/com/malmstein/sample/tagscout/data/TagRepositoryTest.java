@@ -8,13 +8,14 @@ import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class TagRepositoryTest {
 
@@ -24,6 +25,16 @@ public class TagRepositoryTest {
 
     @Mock
     private TagDataSource tagRemoteDataSource;
+
+    @Mock
+    private TagDataSource.LoadTagsCallback loadTagsCallback;
+
+    /**
+     * {@link ArgumentCaptor} is a powerful Mockito API to capture argument values and use them to
+     * perform further actions or assertions on them.
+     */
+    @Captor
+    private ArgumentCaptor<TagDataSource.LoadTagsCallback> tagsCallbackArgumentCaptor;
 
     @Before
     public void setupTasksRepository() {
@@ -46,10 +57,10 @@ public class TagRepositoryTest {
         tagRepository.cleanCache();
 
         // And tags are requested from the tasks repository
-        tagRepository.getTags();
+        tagRepository.getTags(loadTagsCallback);
 
         // Then tags are loaded from the remote data source
-        verify(tagRemoteDataSource).getTags();
+        verify(tagRemoteDataSource).getTags(any(TagDataSource.LoadTagsCallback.class));
     }
 
     @Test
@@ -57,17 +68,15 @@ public class TagRepositoryTest {
         // Given the cache is empty
         tagRepository.cleanCache();
 
-        // And the remote data source has no data available
-        when(tagRemoteDataSource.getTags()).thenReturn(null);
-
         // When calling getTags in the repository
-        List<Tag> returnedTags = tagRepository.getTags();
+        tagRepository.getTags(loadTagsCallback);
 
-        // Then the returned tags are null
-        assertNull(returnedTags);
+        // And the remote data source has no data available
+        verify(tagRemoteDataSource).getTags(tagsCallbackArgumentCaptor.capture());
+        tagsCallbackArgumentCaptor.getValue().onDataNotAvailable();
 
-        // And the cache is still empty
-        assertEquals(0, tagRepository.getCachedTags().size());
+        // Verify no data is returned
+        verify(loadTagsCallback).onDataNotAvailable();
     }
 
     @Test
@@ -75,16 +84,16 @@ public class TagRepositoryTest {
         // Given the cache is empty
         tagRepository.cleanCache();
 
+        // When calling getTags in the repository
+        tagRepository.getTags(loadTagsCallback);
+
         // And the remote data source data is  available
         TAGS.add(new Tag(1, "text1", "color1"));
         TAGS.add(new Tag(2, "text2", "color2"));
-        when(tagRemoteDataSource.getTags()).thenReturn(TAGS);
+        verify(tagRemoteDataSource).getTags(tagsCallbackArgumentCaptor.capture());
+        tagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
 
-        // When calling getTags in the repository
-        List<Tag> returnedTags = tagRepository.getTags();
-
-        // Then the tasks from the remote data source are returned
-        assertEquals(2, returnedTags.size());
+        verify(loadTagsCallback).onTagsLoaded(TAGS);
 
         // And stored in the cache
         assertEquals(2, tagRepository.getCachedTags().size());

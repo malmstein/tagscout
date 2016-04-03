@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 /**
  * Integration test for the {@link FakeTagRemoteDataSource}}.
@@ -30,9 +31,19 @@ public class FakeTagRemoteDataSourceTest {
     @Test
     public void getTags_retrievesLocalTags() {
         // When calling getTags in the repository
-        List<Tag> tags = fakeTagRemoteDataSource.getTags();
-        assertNotNull(tags);
-        assertEquals(50, tags.size());
+        fakeTagRemoteDataSource.getTags(new TagDataSource.LoadTagsCallback() {
+            @Override
+            public void onTagsLoaded(List<Tag> tags) {
+                assertNotNull(tags);
+                assertEquals(50, tags.size());
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                fail();
+            }
+        });
+
     }
 
 }

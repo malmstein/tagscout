@@ -27,15 +27,15 @@ public class FakeTagRemoteDataSource implements TagDataSource {
     }
 
     @Override
-    public List<Tag> getTags() {
+    public void getTags(LoadTagsCallback callback) {
         List<Tag> value;
         Type listType = new TypeToken<ArrayList<Tag>>() {}.getType();
         try {
             value = gson.fromJson(FakeJson.tags, listType);
+            callback.onTagsLoaded(value);
         } catch (Exception e) {
-            return null;
+            callback.onDataNotAvailable();
         }
-        return value;
     }
 
 }

@@ -1,8 +1,9 @@
 package com.malmstein.sample.tagscout.injection;
 
 import com.malmstein.sample.tagscout.data.FakeTagRemoteDataSource;
-import com.malmstein.sample.tagscout.data.RemoteTagDataSource;
 import com.malmstein.sample.tagscout.data.TagRepository;
+import com.malmstein.sample.tagscout.domain.UseCaseHandler;
+import com.malmstein.sample.tagscout.tags.GetTags;
 
 /**
  * Enables injection of mock implementations for
@@ -13,6 +14,14 @@ public class Injection {
 
     public static TagRepository provideTagRepository() {
         return TagRepository.getInstance(FakeTagRemoteDataSource.getInstance());
+    }
+
+    public static UseCaseHandler provideUseCaseHandler() {
+        return UseCaseHandler.getInstance();
+    }
+
+    public static GetTags provideGetTags() {
+        return new GetTags(Injection.provideTagRepository());
     }
 
 }

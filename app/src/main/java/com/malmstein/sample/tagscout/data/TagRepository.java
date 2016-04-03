@@ -1,6 +1,7 @@
 package com.malmstein.sample.tagscout.data;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import com.malmstein.sample.tagscout.data.model.Tag;
 
@@ -42,40 +43,49 @@ public class TagRepository implements TagDataSource {
 
     /**
      * Gets tasks from cache or remote data source, whichever is available first.
-     * This is done synchronously because it's used by the {@link com.malmstein.sample.tagscout.tags.TagsLoader},
-     * which implements the async mechanism.
+     * Note: {@link com.malmstein.sample.tagscout.data.TagDataSource.LoadTagsCallback#onDataNotAvailable()} is fired if all data sources fail to
+     * get the data.
      */
     @Override
-    public List<Tag> getTags() {
+    public void getTags(final TagDataSource.LoadTagsCallback callback) {
         // Grab remote data if cache is empty
         List<Tag> tags = getCachedTags();
         if (cachedTags != null && cachedTags.size() > 0) {
-            return tags;
+            callback.onTagsLoaded(tags);
         } else {
-            tags = tagRemoteSource.getTags();
-            if (tags != null){
-                saveInCache(tags);
-                return tags;
-            } else {
-                return null;
-            }
-        }
+            tagRemoteSource.getTags(new LoadTagsCallback() {
+                @Override
+                public void onTagsLoaded(List<Tag> tags) {
+                     processLoadedTags(tags, callback);
+                }
 
+                @Override
+                public void onDataNotAvailable() {
+                    callback.onDataNotAvailable();
+                }
+            });
+        }
     }
 
-    private void saveInCache(List<Tag> tags) {
-        cachedTags = new LinkedHashMap<>();
+    private void processLoadedTags(List<Tag> tags, final LoadTagsCallback callback) {
+        cleanCache();
         for (Tag tag : tags) {
             cachedTags.put(tag.getId(), tag);
         }
+        callback.onTagsLoaded(new ArrayList<>(cachedTags.values()));
     }
 
+    @VisibleForTesting
     protected List<Tag> getCachedTags() {
         return cachedTags == null ? null : new ArrayList<>(cachedTags.values());
     }
 
+    @VisibleForTesting
     protected void cleanCache(){
-        cachedTags = new LinkedHashMap<>();
+        if (cachedTags == null) {
+            cachedTags = new LinkedHashMap<>();
+        }
+        cachedTags.clear();
     }
 
     /**

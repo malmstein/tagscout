@@ -6,6 +6,13 @@ import java.util.List;
 
 public interface TagDataSource {
 
-    List<Tag> getTags();
+    interface LoadTagsCallback {
+
+        void onTagsLoaded(List<Tag> tags);
+
+        void onDataNotAvailable();
+    }
+
+    void getTags(LoadTagsCallback callback);
 
 }

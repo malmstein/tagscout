@@ -34,7 +34,7 @@ public class RemoteTagDataSource implements TagDataSource {
     }
 
     @Override
-    public List<Tag> getTags() {
+    public void getTags(LoadTagsCallback callback) {
         Request request = new Request.Builder()
                 .get()
                 .url("http://mockbin.org/bin/8053044c-a645-4b17-b020-6d53fa5abedd")
@@ -43,17 +43,17 @@ public class RemoteTagDataSource implements TagDataSource {
         try {
             Response response = client.newCall(request).execute();
             if (!response.isSuccessful()) {
-                return null;
+                callback.onDataNotAvailable();
             } else {
                 List<Tag> value;
                 Type listType = new TypeToken<ArrayList<Tag>>() {
                 }.getType();
                 value = gson.fromJson(response.body().charStream(), listType);
-                return value;
+                callback.onTagsLoaded(value);
             }
 
         } catch (IOException e) {
-            return null;
+            callback.onDataNotAvailable();
         }
 
     }
