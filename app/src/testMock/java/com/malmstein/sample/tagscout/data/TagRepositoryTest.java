@@ -41,8 +41,11 @@ public class TagRepositoryTest {
     }
 
     @Test
-    public void getTasks_requestsAllTasksFromRemoteDataSource() {
-        // When tasks are requested from the tasks repository
+    public void getTasks_requestsAllTagsFromRemoteDataSourceWhenCacheIsEmpty() {
+        // Given the cache is empty
+        tagRepository.cleanCache();
+
+        // And tags are requested from the tasks repository
         tagRepository.getTags();
 
         // Then tags are loaded from the remote data source
@@ -51,7 +54,10 @@ public class TagRepositoryTest {
 
     @Test
     public void getTasksWithRemoteDataSourceUnavailable_noDataIsAvailable() {
-        // When the remote data source has no data available
+        // Given the cache is empty
+        tagRepository.cleanCache();
+
+        // And the remote data source has no data available
         when(tagRemoteDataSource.getTags()).thenReturn(null);
 
         // When calling getTags in the repository
@@ -59,12 +65,17 @@ public class TagRepositoryTest {
 
         // Then the returned tags are null
         assertNull(returnedTags);
+
+        // And the cache is still empty
+        assertEquals(0, tagRepository.getCachedTags().size());
     }
 
     @Test
-    public void getTasksFromRemoteDataSource_returnsListOfTags() {
-        // When the remote data source data available
-        // Set two sample Tags
+    public void getTasksFromRemoteDataSource_returnsListOfTagsAndSavesInCache() {
+        // Given the cache is empty
+        tagRepository.cleanCache();
+
+        // And the remote data source data is  available
         TAGS.add(new Tag(1, "text1", "color1"));
         TAGS.add(new Tag(2, "text2", "color2"));
         when(tagRemoteDataSource.getTags()).thenReturn(TAGS);
@@ -72,8 +83,11 @@ public class TagRepositoryTest {
         // When calling getTags in the repository
         List<Tag> returnedTags = tagRepository.getTags();
 
-        // Verify the tasks from the remote data source are returned
+        // Then the tasks from the remote data source are returned
         assertEquals(2, returnedTags.size());
+
+        // And stored in the cache
+        assertEquals(2, tagRepository.getCachedTags().size());
     }
 
 

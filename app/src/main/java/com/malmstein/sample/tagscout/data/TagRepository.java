@@ -49,15 +49,12 @@ public class TagRepository implements TagDataSource {
     public List<Tag> getTags() {
         // Grab remote data if cache is empty
         List<Tag> tags = getCachedTags();
-        if (cachedTags != null) {
+        if (cachedTags != null && cachedTags.size() > 0) {
             return tags;
         } else {
             tags = tagRemoteSource.getTags();
             if (tags != null){
-                cachedTags = new LinkedHashMap<>();
-                for (Tag tag : tags) {
-                    cachedTags.put(tag.getId(), tag);
-                }
+                saveInCache(tags);
                 return tags;
             } else {
                 return null;
@@ -66,8 +63,19 @@ public class TagRepository implements TagDataSource {
 
     }
 
-    private List<Tag> getCachedTags() {
+    private void saveInCache(List<Tag> tags) {
+        cachedTags = new LinkedHashMap<>();
+        for (Tag tag : tags) {
+            cachedTags.put(tag.getId(), tag);
+        }
+    }
+
+    protected List<Tag> getCachedTags() {
         return cachedTags == null ? null : new ArrayList<>(cachedTags.values());
+    }
+
+    protected void cleanCache(){
+        cachedTags = new LinkedHashMap<>();
     }
 
     /**
