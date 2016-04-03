@@ -9,15 +9,23 @@ import com.malmstein.sample.tagscout.R;
 
 public class TagsContainer extends FrameLayout {
 
+    public TagsContainer(Context context) {
+        super(context);
+    }
+
     public TagsContainer(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public TagsContainer(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
 
-        LayoutInflater.from(getContext()).inflate(R.layout.view_tags_container, null, false);
+        LayoutInflater.from(getContext()).inflate(R.layout.view_tags_container, this, true);
     }
 
 }
