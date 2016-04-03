@@ -58,4 +58,9 @@ public class RemoteTagDataSource implements TagDataSource {
 
     }
 
+    @Override
+    public void deleteAllTags() {
+        // no-op
+    }
+
 }

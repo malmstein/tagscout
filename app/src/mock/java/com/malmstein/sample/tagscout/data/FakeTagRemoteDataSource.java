@@ -11,8 +11,9 @@ import java.util.List;
 public class FakeTagRemoteDataSource implements TagDataSource {
 
     private static FakeTagRemoteDataSource INSTANCE;
-
     private final Gson gson;
+
+    private List<Tag> tags;
 
     public static FakeTagRemoteDataSource getInstance() {
         if (INSTANCE == null) {
@@ -29,12 +30,20 @@ public class FakeTagRemoteDataSource implements TagDataSource {
     @Override
     public void getTags(LoadTagsCallback callback) {
         List<Tag> value;
-        Type listType = new TypeToken<ArrayList<Tag>>() {}.getType();
+        Type listType = new TypeToken<ArrayList<Tag>>() {
+        }.getType();
         try {
-            value = gson.fromJson(FakeJson.tags, listType);
-            callback.onTagsLoaded(value);
+            tags = gson.fromJson(FakeJson.tags, listType);
+            callback.onTagsLoaded(tags);
         } catch (Exception e) {
             callback.onDataNotAvailable();
+        }
+    }
+
+    @Override
+    public void deleteAllTags() {
+        if (tags != null){
+            tags.clear();
         }
     }
 

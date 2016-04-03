@@ -15,4 +15,6 @@ public interface TagDataSource {
 
     void getTags(LoadTagsCallback callback);
 
+    void deleteAllTags();
+
 }
