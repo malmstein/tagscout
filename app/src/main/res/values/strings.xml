@@ -1,3 +1,5 @@
 <resources>
-  <string name="app_name">TagScout</string>
+  <string name="app_name">Tag Scout</string>
+
+  <string name="title_add_tags">Add tags</string>
 </resources>
