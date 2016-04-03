@@ -67,6 +67,15 @@ public class TagRepository implements TagDataSource {
         }
     }
 
+    @Override
+    public void deleteAllTags() {
+        tagRemoteSource.deleteAllTags();
+        if (cachedTags == null) {
+            cachedTags = new LinkedHashMap<>();
+        }
+        cachedTags.clear();
+    }
+
     private void processLoadedTags(List<Tag> tags, final LoadTagsCallback callback) {
         cleanCache();
         for (Tag tag : tags) {

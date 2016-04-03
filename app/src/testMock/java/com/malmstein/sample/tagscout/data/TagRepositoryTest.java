@@ -13,7 +13,9 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
@@ -99,6 +101,17 @@ public class TagRepositoryTest {
         assertEquals(2, tagRepository.getCachedTags().size());
     }
 
+    @Test
+    public void deleteAllTags_deleteTasksToServiceAPIUpdatesCache() {
+        // When all tags are deleted to the tasks repository
+        tagRepository.deleteAllTags();
+
+        // Verify the data sources were called
+        verify(tagRemoteDataSource).deleteAllTags();
+
+        // And the cache is now empty
+        assertThat(tagRepository.cachedTags.size(), is(0));
+    }
 
 
 }
