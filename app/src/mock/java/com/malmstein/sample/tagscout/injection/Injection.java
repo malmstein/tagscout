@@ -3,7 +3,7 @@ package com.malmstein.sample.tagscout.injection;
 import com.malmstein.sample.tagscout.data.FakeTagRemoteDataSource;
 import com.malmstein.sample.tagscout.data.TagRepository;
 import com.malmstein.sample.tagscout.domain.UseCaseHandler;
-import com.malmstein.sample.tagscout.tags.RetrieveTagsUseCase;
+import com.malmstein.sample.tagscout.tags.domain.RetrieveTagsUseCase;
 
 /**
  * Enables injection of mock implementations for

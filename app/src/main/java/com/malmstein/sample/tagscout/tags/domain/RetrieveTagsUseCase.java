@@ -1,4 +1,4 @@
-package com.malmstein.sample.tagscout.tags;
+package com.malmstein.sample.tagscout.tags.domain;
 
 import com.malmstein.sample.tagscout.data.TagDataSource;
 import com.malmstein.sample.tagscout.data.TagRepository;

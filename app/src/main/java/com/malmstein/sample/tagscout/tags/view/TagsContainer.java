@@ -1,4 +1,4 @@
-package com.malmstein.sample.tagscout.tags;
+package com.malmstein.sample.tagscout.tags.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

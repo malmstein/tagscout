@@ -1,4 +1,4 @@
-package com.malmstein.sample.tagscout.tags;
+package com.malmstein.sample.tagscout.tags.domain;
 
 import com.malmstein.sample.tagscout.data.model.Tag;
 
@@ -6,13 +6,14 @@ import java.util.List;
 
 public class TagsContract {
 
-    interface Presenter {
+    public interface Presenter {
 
         void loadTags();
 
+        void markAsSelected(Tag tag);
     }
 
-    interface View {
+    public interface View {
 
         void showTags(List<Tag> tags);
 

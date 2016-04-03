@@ -6,19 +6,19 @@ import android.support.annotation.Nullable;
 public class Tag {
 
     private int id;
-    private String text;
+    private String tag;
     private String color;
 
     /**
      * Use this constructor to create a new Tag.
      *
      * @param id
-     * @param text
+     * @param tag
      * @param color
      */
-    public Tag(@NonNull int id, @NonNull String text, @Nullable String color) {
+    public Tag(@NonNull int id, @NonNull String tag, @Nullable String color) {
         this.id = id;
-        this.text = text;
+        this.tag = tag;
         this.color = color;
     }
 
@@ -26,8 +26,8 @@ public class Tag {
         return id;
     }
 
-    public String getText() {
-        return text;
+    public String getTag() {
+        return tag;
     }
 
     public String getColor() {

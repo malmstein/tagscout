@@ -5,6 +5,8 @@ import com.malmstein.sample.tagscout.data.TagRepository;
 import com.malmstein.sample.tagscout.data.domain.TestUseCaseScheduler;
 import com.malmstein.sample.tagscout.data.model.Tag;
 import com.malmstein.sample.tagscout.domain.UseCaseHandler;
+import com.malmstein.sample.tagscout.tags.domain.RetrieveTagsUseCase;
+import com.malmstein.sample.tagscout.tags.domain.TagsContract;
 
 import java.util.ArrayList;
 import java.util.List;
