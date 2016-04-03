@@ -3,7 +3,7 @@ package com.malmstein.sample.tagscout.injection;
 import com.malmstein.sample.tagscout.data.RemoteTagDataSource;
 import com.malmstein.sample.tagscout.data.TagRepository;
 import com.malmstein.sample.tagscout.domain.UseCaseHandler;
-import com.malmstein.sample.tagscout.tags.GetTags;
+import com.malmstein.sample.tagscout.tags.RetrieveTagsUseCase;
 
 /**
  * Enables injection of mock implementations for
@@ -20,8 +20,8 @@ public class Injection {
         return UseCaseHandler.getInstance();
     }
 
-    public static GetTags provideGetTags() {
-        return new GetTags(Injection.provideTagRepository());
+    public static RetrieveTagsUseCase provideRetrieveTagsUseCase() {
+        return new RetrieveTagsUseCase(Injection.provideTagRepository());
     }
 
 }

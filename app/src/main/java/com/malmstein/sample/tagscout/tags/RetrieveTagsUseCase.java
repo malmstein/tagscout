@@ -11,11 +11,11 @@ import java.util.List;
 /**
  * TODO: Javadoc
  */
-public class GetTags extends UseCase<GetTags.RequestValues, GetTags.ResponseValue> {
+public class RetrieveTagsUseCase extends UseCase<RetrieveTagsUseCase.RequestValues, RetrieveTagsUseCase.ResponseValue> {
 
     private final TagRepository tagRepository;
 
-    public GetTags(TagRepository tasksRepository) {
+    public RetrieveTagsUseCase(TagRepository tasksRepository) {
         tagRepository = tasksRepository;
     }
 

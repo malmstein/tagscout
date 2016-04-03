@@ -10,18 +10,18 @@ public class TagsPresenter implements TagsContract.Presenter{
     @NonNull
     private final UseCaseHandler useCaseHandler;
     @NonNull
-    private final GetTags getTags;
+    private final RetrieveTagsUseCase retrieveTagsUseCase;
 
-    public TagsPresenter(@NonNull UseCaseHandler useCaseHandler, @NonNull GetTags getTags){
+    public TagsPresenter(@NonNull UseCaseHandler useCaseHandler, @NonNull RetrieveTagsUseCase retrieveTagsUseCase){
         this.useCaseHandler = useCaseHandler;
-        this.getTags = getTags;
+        this.retrieveTagsUseCase = retrieveTagsUseCase;
     }
 
     @Override
     public void loadTags() {
-        useCaseHandler.execute(getTags, null, new UseCase.UseCaseCallback<GetTags.ResponseValue>() {
+        useCaseHandler.execute(retrieveTagsUseCase, null, new UseCase.UseCaseCallback<RetrieveTagsUseCase.ResponseValue>() {
             @Override
-            public void onSuccess(GetTags.ResponseValue response) {
+            public void onSuccess(RetrieveTagsUseCase.ResponseValue response) {
                 // send data to UI
             }
 
