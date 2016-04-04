@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.malmstein.sample.tagscout.R;
@@ -61,6 +62,7 @@ public class TagsAdapter extends BaseAdapter {
         final Tag tag = getItem(position);
 
         holder.textView.setText(tag.getTag());
+        holder.selectedView.setSelected(true);
         holder.rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,10 +76,12 @@ public class TagsAdapter extends BaseAdapter {
     public static class ViewHolder {
         public final View rowView;
         public final TextView textView;
+        public final ImageView selectedView;
 
         public ViewHolder(View view) {
             rowView = view;
             textView = (TextView) view.findViewById(R.id.tag_title);
+            selectedView = (ImageView) view.findViewById(R.id.tag_selected);
         }
     }
 

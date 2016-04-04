@@ -1,17 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="?android:attr/listPreferredItemHeight"
-  android:orientation="horizontal"
   android:paddingLeft="@dimen/activity_horizontal_margin"
   android:paddingRight="@dimen/activity_horizontal_margin">
 
   <TextView
     android:id="@+id/tag_title"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
     android:textColor="@color/tags_text"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentStart="true"
+    android:layout_centerInParent="true"
     android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-</LinearLayout>
+  <ImageView
+    android:id="@+id/tag_selected"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true"
+    android:layout_centerInParent="true"
+    android:background="@drawable/tag_selected_background"/>
+
+</RelativeLayout>
