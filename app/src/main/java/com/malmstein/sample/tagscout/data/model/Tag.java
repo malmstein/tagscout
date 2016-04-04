@@ -53,7 +53,4 @@ public class Tag {
         return selected;
     }
 
-    public void toggleSelection(){
-        selected = !selected;
-    }
 }

@@ -77,10 +77,9 @@ public class TagRepository implements TagDataSource {
     }
 
     @Override
-    public void selectTag(Tag tag) {
-        tagRemoteSource.selectTag(tag);
+    public void toggleTagSelection(Tag tag) {
 
-        Tag selectedTag = new Tag(tag.getId(), tag.getTag(), tag.getColor(), true);
+        Tag selectedTag = new Tag(tag.getId(), tag.getTag(), tag.getColor(), !tag.isSelected());
 
         // Do in memory cache update to keep the app UI up to date
         if (cachedTags == null) {
@@ -97,8 +96,7 @@ public class TagRepository implements TagDataSource {
         callback.onTagsLoaded(new ArrayList<>(cachedTags.values()));
     }
 
-    @VisibleForTesting
-    protected List<Tag> getCachedTags() {
+    public List<Tag> getCachedTags() {
         return cachedTags == null ? null : new ArrayList<>(cachedTags.values());
     }
 

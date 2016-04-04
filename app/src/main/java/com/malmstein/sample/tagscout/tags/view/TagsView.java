@@ -39,6 +39,7 @@ public class TagsView extends FrameLayout implements TagsContract.View{
         super.onFinishInflate();
         LayoutInflater.from(getContext()).inflate(R.layout.view_tags_view, this, true);
         tagsList = (ListView) findViewById(R.id.tags_list);
+        setAdapter();
     }
 
     public void setPresenter(TagsPresenter tagsPresenter) {
@@ -47,7 +48,6 @@ public class TagsView extends FrameLayout implements TagsContract.View{
 
     @Override
     public void showTags(List<Tag> tags) {
-        setAdapter();
         tagsAdapter.replaceData(tags);
     }
 
@@ -65,8 +65,8 @@ public class TagsView extends FrameLayout implements TagsContract.View{
 
     TagsAdapter.TagItemListener tagItemListener = new TagsAdapter.TagItemListener() {
         @Override
-        public void onTagClick(Tag clickedTag) {
-            tagsPresenter.markAsSelected(clickedTag);
+        public void onTagSelected(Tag selectedTag) {
+            tagsPresenter.markAsSelected(selectedTag);
         }
     };
 

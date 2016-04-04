@@ -49,7 +49,7 @@ public class TagsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = convertView;
-        final ViewHolder holder;
+        ViewHolder holder;
 
         if (rowView == null) {
             rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag, parent, false);
@@ -66,7 +66,7 @@ public class TagsAdapter extends BaseAdapter {
         holder.rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tagItemListener.onTagClick(tag);
+                tagItemListener.onTagSelected(tag);
             }
         });
 
@@ -87,7 +87,7 @@ public class TagsAdapter extends BaseAdapter {
 
     public interface TagItemListener {
 
-        void onTagClick(Tag clickedTag);
+        void onTagSelected(Tag clickedTag);
 
     }
 

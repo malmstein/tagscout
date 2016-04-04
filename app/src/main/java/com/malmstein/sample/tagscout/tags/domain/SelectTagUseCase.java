@@ -4,6 +4,8 @@ import com.malmstein.sample.tagscout.data.TagRepository;
 import com.malmstein.sample.tagscout.data.model.Tag;
 import com.malmstein.sample.tagscout.domain.UseCase;
 
+import java.util.List;
+
 public class SelectTagUseCase extends UseCase<SelectTagUseCase.RequestValues, SelectTagUseCase.ResponseValue> {
 
     private final TagRepository tagRepository;
@@ -14,9 +16,8 @@ public class SelectTagUseCase extends UseCase<SelectTagUseCase.RequestValues, Se
 
     @Override
     protected void executeUseCase(RequestValues requestValues) {
-        Tag selectedTag = requestValues.getSelectedTag();
-        tagRepository.selectTag(selectedTag);
-        getUseCaseCallback().onSuccess(new ResponseValue());
+        tagRepository.toggleTagSelection(requestValues.getSelectedTag());
+        getUseCaseCallback().onSuccess(new ResponseValue(tagRepository.getCachedTags()));
     }
 
     public static class RequestValues extends UseCase.RequestValues {
@@ -33,6 +34,16 @@ public class SelectTagUseCase extends UseCase<SelectTagUseCase.RequestValues, Se
     }
 
     public class ResponseValue extends UseCase.ResponseValue {
+
+        private List<Tag> tags;
+
+        public ResponseValue(List<Tag> tags) {
+            this.tags = tags;
+        }
+
+        public List<Tag> getTags() {
+            return tags;
+        }
     }
 
 }

@@ -17,6 +17,6 @@ public interface TagDataSource {
 
     void deleteAllTags();
 
-    void selectTag(Tag tag);
+    void toggleTagSelection(Tag tag);
 
 }

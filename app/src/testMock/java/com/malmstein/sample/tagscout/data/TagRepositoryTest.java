@@ -1,6 +1,7 @@
 package com.malmstein.sample.tagscout.data;
 
 import com.malmstein.sample.tagscout.data.model.Tag;
+import com.malmstein.sample.tagscout.tags.domain.TagsContract;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,9 @@ public class TagRepositoryTest {
     @Mock
     private TagDataSource.LoadTagsCallback loadTagsCallback;
 
+    @Mock
+    private TagsContract.View tasksView;
+
     /**
      * {@link ArgumentCaptor} is a powerful Mockito API to capture argument values and use them to
      * perform further actions or assertions on them.
@@ -46,6 +50,10 @@ public class TagRepositoryTest {
 
         // Get a reference to the class under test
         tagRepository = TagRepository.getInstance(tagRemoteDataSource);
+
+        TAGS.clear();
+        TAGS.add(new Tag(1, "text1", "color1"));
+        TAGS.add(new Tag(2, "text2", "color2"));
     }
 
     @After
@@ -90,9 +98,7 @@ public class TagRepositoryTest {
         tagRepository.getTags(loadTagsCallback);
 
         // And the remote data source data is  available
-        TAGS.clear();
-        TAGS.add(new Tag(1, "text1", "color1"));
-        TAGS.add(new Tag(2, "text2", "color2"));
+
         verify(tagRemoteDataSource).getTags(tagsCallbackArgumentCaptor.capture());
         tagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
 
@@ -122,26 +128,17 @@ public class TagRepositoryTest {
         // When calling getTags in the repository
         tagRepository.getTags(loadTagsCallback);
 
-        // And the remote data source data is  available
-        Tag tag1 = new Tag(1, "text1", "color1");
-        Tag tag2 = new Tag(2, "text2", "color2");
-
-        TAGS.clear();
-        TAGS.add(tag1);
-        TAGS.add(tag2);
-
         verify(tagRemoteDataSource).getTags(tagsCallbackArgumentCaptor.capture());
         tagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
 
         verify(loadTagsCallback).onTagsLoaded(TAGS);
 
         // When a task is selected to the tasks repository
-        tagRepository.selectTag(tag1);
+        tagRepository.toggleTagSelection(TAGS.get(0));
 
         // Then the service API and persistent repository are called and the cache is updated
-        verify(tagRemoteDataSource).selectTag(tag1);
-        assertThat(tagRepository.cachedTags.get(tag1.getId()).isSelected(), is(true));
+        verify(tagRemoteDataSource).toggleTagSelection(TAGS.get(0));
+        assertThat(tagRepository.cachedTags.get(TAGS.get(0).getId()).isSelected(), is(true));
     }
-
 
 }

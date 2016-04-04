@@ -18,7 +18,10 @@ public class TagsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tags);
 
         tagsView = (TagsView) findViewById(R.id.tags_view);
-        tagsPresenter = new TagsPresenter(Injection.provideUseCaseHandler(), Injection.provideRetrieveTagsUseCase(), tagsView);
+        tagsPresenter = new TagsPresenter(Injection.provideUseCaseHandler(),
+                                          Injection.provideRetrieveTagsUseCase(),
+                                          Injection.provideSelectTagUseCase(),
+                                          tagsView);
         tagsView.setPresenter(tagsPresenter);
 
         if (savedInstanceState == null) {
