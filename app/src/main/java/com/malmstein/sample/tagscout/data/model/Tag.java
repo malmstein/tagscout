@@ -16,6 +16,20 @@ public class Tag {
      * @param tag
      * @param color
      */
+    public Tag(@NonNull int id, @NonNull String tag, @NonNull String color) {
+        this.id = id;
+        this.tag = tag;
+        this.color = color;
+        this.selected = false;
+    }
+
+    /**
+     * Use this constructor to create a new Tag.
+     *
+     * @param id
+     * @param tag
+     * @param color
+     */
     public Tag(@NonNull int id, @NonNull String tag, @NonNull String color, @NonNull boolean selected) {
         this.id = id;
         this.tag = tag;

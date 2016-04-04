@@ -76,6 +76,19 @@ public class TagRepository implements TagDataSource {
         cachedTags.clear();
     }
 
+    @Override
+    public void selectTag(Tag tag) {
+        tagRemoteSource.selectTag(tag);
+
+        Tag selectedTag = new Tag(tag.getId(), tag.getTag(), tag.getColor(), true);
+
+        // Do in memory cache update to keep the app UI up to date
+        if (cachedTags == null) {
+            cachedTags = new LinkedHashMap<>();
+        }
+        cachedTags.put(tag.getId(), selectedTag);
+    }
+
     private void processLoadedTags(List<Tag> tags, final LoadTagsCallback callback) {
         cleanCache();
         for (Tag tag : tags) {
@@ -104,5 +117,6 @@ public class TagRepository implements TagDataSource {
     public static void destroyInstance() {
         INSTANCE = null;
     }
+
 
 }

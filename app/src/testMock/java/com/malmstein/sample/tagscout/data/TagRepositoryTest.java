@@ -113,5 +113,32 @@ public class TagRepositoryTest {
         assertThat(tagRepository.cachedTags.size(), is(0));
     }
 
+    @Test
+    public void selectTag_marksTagAsSelectedAndUpdatesCache() {
+        // Given the cache is empty
+        tagRepository.cleanCache();
+
+        // When calling getTags in the repository
+        tagRepository.getTags(loadTagsCallback);
+
+        // And the remote data source data is  available
+        Tag tag1 = new Tag(1, "text1", "color1");
+        Tag tag2 = new Tag(2, "text2", "color2");
+
+        TAGS.add(tag1);
+        TAGS.add(tag2);
+        verify(tagRemoteDataSource).getTags(tagsCallbackArgumentCaptor.capture());
+        tagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
+
+        verify(loadTagsCallback).onTagsLoaded(TAGS);
+
+        // When a task is selected to the tasks repository
+        tagRepository.selectTag(tag1);
+
+        // Then the service API and persistent repository are called and the cache is updated
+        verify(tagRemoteDataSource).selectTag(tag1);
+        assertThat(tagRepository.cachedTags.get(tag1.getId()).isSelected(), is(true));
+    }
+
 
 }

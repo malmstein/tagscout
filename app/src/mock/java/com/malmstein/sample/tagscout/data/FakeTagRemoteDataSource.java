@@ -29,7 +29,6 @@ public class FakeTagRemoteDataSource implements TagDataSource {
 
     @Override
     public void getTags(LoadTagsCallback callback) {
-        List<Tag> value;
         Type listType = new TypeToken<ArrayList<Tag>>() {
         }.getType();
         try {
@@ -42,8 +41,26 @@ public class FakeTagRemoteDataSource implements TagDataSource {
 
     @Override
     public void deleteAllTags() {
-        if (tags != null){
+        if (tags != null) {
             tags.clear();
+        }
+    }
+
+    @Override
+    public void selectTag(Tag tag) {
+        Tag selectedTag = new Tag(tag.getId(), tag.getTag(), tag.getColor(), true);
+        replaceTag(tag, selectedTag);
+    }
+
+    private void replaceTag(Tag tag, Tag selectedTag) {
+        int index = Integer.MAX_VALUE;
+        for (int i = 0; i < tags.size(); i++) {
+            if (tags.get(i).getId() == selectedTag.getId()) {
+                index = i;
+            }
+        }
+        if (index < Integer.MAX_VALUE) {
+            tags.set(index, tag);
         }
     }
 
