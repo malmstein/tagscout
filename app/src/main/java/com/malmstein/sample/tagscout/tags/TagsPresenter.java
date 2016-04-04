@@ -40,7 +40,7 @@ public class TagsPresenter implements TagsContract.Presenter{
 
     @Override
     public void markAsSelected(Tag tag) {
-        // will show taks as selected and add to tag container
+
     }
 
 }
