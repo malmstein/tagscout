@@ -90,6 +90,7 @@ public class TagRepositoryTest {
         tagRepository.getTags(loadTagsCallback);
 
         // And the remote data source data is  available
+        TAGS.clear();
         TAGS.add(new Tag(1, "text1", "color1"));
         TAGS.add(new Tag(2, "text2", "color2"));
         verify(tagRemoteDataSource).getTags(tagsCallbackArgumentCaptor.capture());
@@ -125,8 +126,10 @@ public class TagRepositoryTest {
         Tag tag1 = new Tag(1, "text1", "color1");
         Tag tag2 = new Tag(2, "text2", "color2");
 
+        TAGS.clear();
         TAGS.add(tag1);
         TAGS.add(tag2);
+
         verify(tagRemoteDataSource).getTags(tagsCallbackArgumentCaptor.capture());
         tagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
 
