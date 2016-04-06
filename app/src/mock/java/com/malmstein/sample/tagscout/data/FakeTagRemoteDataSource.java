@@ -29,7 +29,6 @@ public class FakeTagRemoteDataSource implements TagDataSource {
 
     @Override
     public void getTags(LoadTagsCallback callback) {
-        List<Tag> value;
         Type listType = new TypeToken<ArrayList<Tag>>() {
         }.getType();
         try {
@@ -42,9 +41,14 @@ public class FakeTagRemoteDataSource implements TagDataSource {
 
     @Override
     public void deleteAllTags() {
-        if (tags != null){
+        if (tags != null) {
             tags.clear();
         }
+    }
+
+    @Override
+    public void toggleTagSelection(Tag tag) {
+        // this would trigger a remote call to the api
     }
 
 }

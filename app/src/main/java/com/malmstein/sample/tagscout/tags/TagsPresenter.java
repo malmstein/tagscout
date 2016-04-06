@@ -6,20 +6,24 @@ import com.malmstein.sample.tagscout.data.model.Tag;
 import com.malmstein.sample.tagscout.domain.UseCase;
 import com.malmstein.sample.tagscout.domain.UseCaseHandler;
 import com.malmstein.sample.tagscout.tags.domain.RetrieveTagsUseCase;
+import com.malmstein.sample.tagscout.tags.domain.SelectTagUseCase;
 import com.malmstein.sample.tagscout.tags.domain.TagsContract;
 
-public class TagsPresenter implements TagsContract.Presenter{
+public class TagsPresenter implements TagsContract.Presenter {
 
     @NonNull
     private final UseCaseHandler useCaseHandler;
     @NonNull
     private final RetrieveTagsUseCase retrieveTagsUseCase;
     @NonNull
+    private final SelectTagUseCase selectTagUseCase;
+    @NonNull
     private final TagsContract.View tagsView;
 
-    public TagsPresenter(@NonNull UseCaseHandler useCaseHandler, @NonNull RetrieveTagsUseCase retrieveTagsUseCase, @NonNull TagsContract.View tagsView){
+    public TagsPresenter(@NonNull UseCaseHandler useCaseHandler, @NonNull RetrieveTagsUseCase retrieveTagsUseCase, @NonNull SelectTagUseCase selectTagUseCase, @NonNull TagsContract.View tagsView) {
         this.useCaseHandler = useCaseHandler;
         this.retrieveTagsUseCase = retrieveTagsUseCase;
+        this.selectTagUseCase = selectTagUseCase;
         this.tagsView = tagsView;
     }
 
@@ -40,7 +44,17 @@ public class TagsPresenter implements TagsContract.Presenter{
 
     @Override
     public void markAsSelected(Tag tag) {
-        // will show taks as selected and add to tag container
+        useCaseHandler.execute(selectTagUseCase, new SelectTagUseCase.RequestValues(tag), new UseCase.UseCaseCallback<SelectTagUseCase.ResponseValue>() {
+            @Override
+            public void onSuccess(SelectTagUseCase.ResponseValue response) {
+                tagsView.showTags(response.getTags());
+            }
+
+            @Override
+            public void onError(Error error) {
+                tagsView.showLoadingTagsError();
+            }
+        });
     }
 
 }

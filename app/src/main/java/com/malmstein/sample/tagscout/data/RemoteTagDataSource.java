@@ -63,4 +63,9 @@ public class RemoteTagDataSource implements TagDataSource {
         // no-op
     }
 
+    @Override
+    public void toggleTagSelection(Tag tag) {
+        // this would trigger a remote call to the api
+    }
+
 }

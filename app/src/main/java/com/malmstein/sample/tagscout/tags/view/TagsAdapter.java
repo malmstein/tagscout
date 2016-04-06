@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.malmstein.sample.tagscout.R;
@@ -48,25 +49,47 @@ public class TagsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = convertView;
-        ViewHolder holder;
-
         if (rowView == null) {
-            rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag, parent, false);
-            holder = new ViewHolder(rowView);
-            rowView.setTag(holder);
-        } else {
-            holder = (ViewHolder) rowView.getTag();
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            rowView = inflater.inflate(R.layout.item_tag, parent, false);
         }
 
         final Tag tag = getItem(position);
 
-        holder.textView.setText(tag.getTag());
-        holder.rowView.setOnClickListener(new View.OnClickListener() {
+        TextView textView = (TextView) rowView.findViewById(R.id.tag_title);
+        textView.setText(tag.getTag());
+
+        ImageView imageView = (ImageView) rowView.findViewById(R.id.tag_selected);
+        imageView.setSelected(tag.isSelected());
+
+        rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tagItemListener.onTagClick(tag);
+                tagItemListener.onTagSelected(tag);
             }
         });
+
+//        View rowView = convertView;
+//        ViewHolder holder;
+//
+//        if (rowView == null) {
+//            rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag, parent, false);
+//            holder = new ViewHolder(rowView);
+//            rowView.setTag(holder);
+//        } else {
+//            holder = (ViewHolder) rowView.getTag();
+//        }
+//
+//
+//
+//        holder.textView.setText(tag.getTag());
+//        holder.selectedView.setSelected(tag.isSelected());
+//        holder.rowView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                tagItemListener.onTagSelected(tag);
+//            }
+//        });
 
         return rowView;
     }
@@ -74,16 +97,18 @@ public class TagsAdapter extends BaseAdapter {
     public static class ViewHolder {
         public final View rowView;
         public final TextView textView;
+        public final ImageView selectedView;
 
         public ViewHolder(View view) {
             rowView = view;
             textView = (TextView) view.findViewById(R.id.tag_title);
+            selectedView = (ImageView) view.findViewById(R.id.tag_selected);
         }
     }
 
     public interface TagItemListener {
 
-        void onTagClick(Tag clickedTag);
+        void onTagSelected(Tag clickedTag);
 
     }
 

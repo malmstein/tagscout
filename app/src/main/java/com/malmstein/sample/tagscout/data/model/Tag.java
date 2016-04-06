@@ -1,13 +1,13 @@
 package com.malmstein.sample.tagscout.data.model;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 public class Tag {
 
     private int id;
     private String tag;
     private String color;
+    private boolean selected;
 
     /**
      * Use this constructor to create a new Tag.
@@ -16,10 +16,25 @@ public class Tag {
      * @param tag
      * @param color
      */
-    public Tag(@NonNull int id, @NonNull String tag, @Nullable String color) {
+    public Tag(@NonNull int id, @NonNull String tag, @NonNull String color) {
         this.id = id;
         this.tag = tag;
         this.color = color;
+        this.selected = false;
+    }
+
+    /**
+     * Use this constructor to create a new Tag.
+     *
+     * @param id
+     * @param tag
+     * @param color
+     */
+    public Tag(@NonNull int id, @NonNull String tag, @NonNull String color, @NonNull boolean selected) {
+        this.id = id;
+        this.tag = tag;
+        this.color = color;
+        this.selected = selected;
     }
 
     public int getId() {
@@ -33,4 +48,9 @@ public class Tag {
     public String getColor() {
         return color;
     }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
 }

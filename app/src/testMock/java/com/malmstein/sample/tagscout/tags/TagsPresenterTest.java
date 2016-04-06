@@ -5,6 +5,7 @@ import com.malmstein.sample.tagscout.data.TagRepository;
 import com.malmstein.sample.tagscout.data.domain.TestUseCaseScheduler;
 import com.malmstein.sample.tagscout.data.model.Tag;
 import com.malmstein.sample.tagscout.domain.UseCaseHandler;
+import com.malmstein.sample.tagscout.injection.Injection;
 import com.malmstein.sample.tagscout.tags.domain.RetrieveTagsUseCase;
 import com.malmstein.sample.tagscout.tags.domain.TagsContract;
 
@@ -19,6 +20,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 
 public class TagsPresenterTest {
@@ -48,7 +51,7 @@ public class TagsPresenterTest {
         UseCaseHandler useCaseHandler = new UseCaseHandler(new TestUseCaseScheduler());
         RetrieveTagsUseCase retrieveTagsUseCase = new RetrieveTagsUseCase(tagRepository);
 
-        tagsPresenter = new TagsPresenter(useCaseHandler, retrieveTagsUseCase, tagsView);
+        tagsPresenter = new TagsPresenter(useCaseHandler, retrieveTagsUseCase, Injection.provideSelectTagUseCase(), tagsView);
     }
 
     private void givenMockTags(){
@@ -85,4 +88,16 @@ public class TagsPresenterTest {
         verify(tagsView).showLoadingTagsError();
     }
 
+    @Test
+    public void selectedTag_ShowsTagMarkedSelected() {
+        // Given a stubbed tag
+        Tag tag1 = TAGS.get(0);
+
+        // When tag is marked as selected
+        tagsPresenter.markAsSelected(tag1);
+
+        // Then repository is called and task marked complete UI is shown
+        verify(tagRepository).toggleTagSelection(eq(tag1));
+        verify(tagsView).showTags(any(List.class));
+    }
 }

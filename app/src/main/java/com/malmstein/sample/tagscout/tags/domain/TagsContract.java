@@ -18,5 +18,6 @@ public class TagsContract {
         void showTags(List<Tag> tags);
 
         void showLoadingTagsError();
+
     }
 }
