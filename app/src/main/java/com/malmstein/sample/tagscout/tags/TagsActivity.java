@@ -1,6 +1,7 @@
 package com.malmstein.sample.tagscout.tags;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.malmstein.sample.tagscout.R;
@@ -23,10 +24,11 @@ public class TagsActivity extends AppCompatActivity {
                                           Injection.provideSelectTagUseCase(),
                                           tagsView);
         tagsView.setPresenter(tagsPresenter);
-
-        if (savedInstanceState == null) {
-            tagsPresenter.loadTags();
-        }
     }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        tagsPresenter.loadTags();
+    }
 }

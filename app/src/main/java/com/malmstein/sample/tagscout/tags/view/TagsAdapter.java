@@ -49,26 +49,47 @@ public class TagsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView = convertView;
-        ViewHolder holder;
-
         if (rowView == null) {
-            rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag, parent, false);
-            holder = new ViewHolder(rowView);
-            rowView.setTag(holder);
-        } else {
-            holder = (ViewHolder) rowView.getTag();
+            LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+            rowView = inflater.inflate(R.layout.item_tag, parent, false);
         }
 
         final Tag tag = getItem(position);
 
-        holder.textView.setText(tag.getTag());
-        holder.selectedView.setSelected(true);
-        holder.rowView.setOnClickListener(new View.OnClickListener() {
+        TextView textView = (TextView) rowView.findViewById(R.id.tag_title);
+        textView.setText(tag.getTag());
+
+        ImageView imageView = (ImageView) rowView.findViewById(R.id.tag_selected);
+        imageView.setSelected(tag.isSelected());
+
+        rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tagItemListener.onTagSelected(tag);
             }
         });
+
+//        View rowView = convertView;
+//        ViewHolder holder;
+//
+//        if (rowView == null) {
+//            rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag, parent, false);
+//            holder = new ViewHolder(rowView);
+//            rowView.setTag(holder);
+//        } else {
+//            holder = (ViewHolder) rowView.getTag();
+//        }
+//
+//
+//
+//        holder.textView.setText(tag.getTag());
+//        holder.selectedView.setSelected(tag.isSelected());
+//        holder.rowView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                tagItemListener.onTagSelected(tag);
+//            }
+//        });
 
         return rowView;
     }
