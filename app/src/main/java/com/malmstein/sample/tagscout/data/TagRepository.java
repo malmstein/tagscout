@@ -78,13 +78,11 @@ public class TagRepository implements TagDataSource {
 
     @Override
     public void toggleTagSelection(Tag tag) {
-        Tag selectedTag = new Tag(tag.getId(), tag.getTag(), tag.getColor(), !tag.isSelected());
-
         // Do in memory cache update to keep the app UI up to date
         if (cachedTags == null) {
             cachedTags = new LinkedHashMap<>();
         }
-        cachedTags.put(tag.getId(), selectedTag);
+        cachedTags.put(tag.getId(), tag);
     }
 
     private void processLoadedTags(List<Tag> tags, final LoadTagsCallback callback) {

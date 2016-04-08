@@ -21,7 +21,6 @@ import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 
 public class TagsPresenterTest {
@@ -43,7 +42,7 @@ public class TagsPresenterTest {
     private ArgumentCaptor<TagDataSource.LoadTagsCallback> loadTagsCallbackArgumentCaptor;
 
     @Before
-    public void setupTagsPresenter() {
+    public void setup() {
         MockitoAnnotations.initMocks(this);
 
         givenMockTags();
@@ -62,8 +61,8 @@ public class TagsPresenterTest {
 
     private void givenMockTags() {
         TAGS = new ArrayList<>();
-        TAGS.add(new Tag(1, "text1", "color1"));
-        TAGS.add(new Tag(2, "text2", "color2"));
+        TAGS.add(new Tag(1, "text1", "color1", true));
+        TAGS.add(new Tag(2, "text2", "color2", false));
     }
 
     @Test
@@ -96,14 +95,37 @@ public class TagsPresenterTest {
 
     @Test
     public void selectedTag_ShowsTagMarkedSelected() {
-        // Given a stubbed tag
+        // Given a selected tag
         Tag tag1 = TAGS.get(0);
 
         // When tag is marked as selected
         tagsPresenter.toggleTagState(tag1);
 
-        // Then repository is called and task marked complete UI is shown
-        verify(tagRepository).toggleTagSelection(eq(tag1));
+        // Then repository is called
+        verify(tagRepository).toggleTagSelection(any(Tag.class));
+
+        // And all tags are updated in the list
         verify(tagsView).showTags(any(List.class));
+
+        // And the tag is removed from the container
+        verify(tagsContainerView).removeTag(any(Tag.class));
+    }
+
+    @Test
+    public void unSelectedTag_RemoveTagMarkedSelected() {
+        // Given a unselectedTag tag
+        Tag tag1 = TAGS.get(1);
+
+        // When tag is marked as selected
+        tagsPresenter.toggleTagState(tag1);
+
+        // Then repository is called
+        verify(tagRepository).toggleTagSelection(any(Tag.class));
+
+        // And all tags are updated in the list
+        verify(tagsView).showTags(any(List.class));
+
+        // And the tag is added to the container
+        verify(tagsContainerView).addTag(any(Tag.class));
     }
 }
