@@ -37,7 +37,7 @@ public class TagsSelected extends RelativeLayout {
 
     public static final float DEFAULT_TAG_LAYOUT_BORDER_SIZE = 0f;
     public static final float DEFAULT_TAG_RADIUS = 10;
-    public static final int DEFAULT_TAG_LAYOUT_COLOR = Color.parseColor("#AED374");
+    public static final int DEFAULT_TAG_LAYOUT_COLOR = Color.parseColor("#19db78");
     public static final int DEFAULT_TAG_LAYOUT_COLOR_PRESS = Color.parseColor("#88363636");
     public static final int DEFAULT_TAG_LAYOUT_BORDER_COLOR = Color.parseColor("#ffffff");
 
@@ -175,15 +175,14 @@ public class TagsSelected extends RelativeLayout {
         StateListDrawable states = new StateListDrawable();
 
         GradientDrawable gdNormal = new GradientDrawable();
-        gdNormal.setColor(DEFAULT_TAG_LAYOUT_COLOR);
+        gdNormal.setColor(Color.parseColor(tag.getColor()));
         gdNormal.setCornerRadius(DEFAULT_TAG_RADIUS);
-        gdNormal.setStroke(dipToPx(getContext(), DEFAULT_TAG_LAYOUT_BORDER_SIZE), DEFAULT_TAG_LAYOUT_BORDER_COLOR);
+        gdNormal.setStroke(dipToPx(getContext(), DEFAULT_TAG_LAYOUT_BORDER_SIZE), Color.parseColor(tag.getColor()));
 
         GradientDrawable gdPress = new GradientDrawable();
         gdPress.setColor(DEFAULT_TAG_LAYOUT_COLOR_PRESS);
         gdPress.setCornerRadius(DEFAULT_TAG_RADIUS);
         states.addState(new int[]{android.R.attr.state_pressed}, gdPress);
-        //must add state_pressed first，or state_pressed will not take effect
         states.addState(new int[]{}, gdNormal);
         return states;
     }

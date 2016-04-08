@@ -63,6 +63,7 @@ public class TagsAdapter extends BaseAdapter {
 
         holder.textView.setText(tag.getTag());
         holder.selectedView.setVisibility(tag.isSelected() ? View.VISIBLE : View.GONE);
+        holder.rowView.setSelected(tag.isSelected());
         holder.rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
