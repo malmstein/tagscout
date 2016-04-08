@@ -1,4 +1,4 @@
-package com.malmstein.sample.tagscout.tags.view;
+package com.malmstein.sample.tagscout.tags;
 
 import android.view.LayoutInflater;
 import android.view.View;

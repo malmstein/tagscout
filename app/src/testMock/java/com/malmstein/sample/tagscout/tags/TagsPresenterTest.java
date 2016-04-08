@@ -34,6 +34,9 @@ public class TagsPresenterTest {
     @Mock
     private TagsContract.View tagsView;
 
+    @Mock
+    private TagsContract.ContainerView tagsContainerView;
+
     private TagsPresenter tagsPresenter;
 
     @Captor
@@ -47,21 +50,24 @@ public class TagsPresenterTest {
         givenTagsPresenter();
     }
 
-    private void givenTagsPresenter(){
+    private void givenTagsPresenter() {
         UseCaseHandler useCaseHandler = new UseCaseHandler(new TestUseCaseScheduler());
         RetrieveTagsUseCase retrieveTagsUseCase = new RetrieveTagsUseCase(tagRepository);
 
-        tagsPresenter = new TagsPresenter(useCaseHandler, retrieveTagsUseCase, Injection.provideSelectTagUseCase(), tagsView);
+        tagsPresenter = new TagsPresenter(useCaseHandler, retrieveTagsUseCase,
+                                          Injection.provideSelectTagUseCase(), tagsView,
+                                          tagsContainerView
+        );
     }
 
-    private void givenMockTags(){
+    private void givenMockTags() {
         TAGS = new ArrayList<>();
         TAGS.add(new Tag(1, "text1", "color1"));
         TAGS.add(new Tag(2, "text2", "color2"));
     }
 
     @Test
-    public void loadAllTagsFromRepositoryAndLoadIntoView(){
+    public void loadAllTagsFromRepositoryAndLoadIntoView() {
         // When tasks are loaded
         tagsPresenter.loadTags();
 
@@ -94,7 +100,7 @@ public class TagsPresenterTest {
         Tag tag1 = TAGS.get(0);
 
         // When tag is marked as selected
-        tagsPresenter.markAsSelected(tag1);
+        tagsPresenter.select(tag1);
 
         // Then repository is called and task marked complete UI is shown
         verify(tagRepository).toggleTagSelection(eq(tag1));

@@ -10,7 +10,10 @@ public class TagsContract {
 
         void loadTags();
 
-        void markAsSelected(Tag tag);
+        void select(Tag tag);
+
+        void unSelect(Tag tag);
+
     }
 
     public interface View {
@@ -20,4 +23,13 @@ public class TagsContract {
         void showLoadingTagsError();
 
     }
+
+    public interface ContainerView {
+
+        void addTag(Tag tag);
+
+        void removeTag(Tag tag);
+
+    }
+
 }

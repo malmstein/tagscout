@@ -19,12 +19,17 @@ public class TagsPresenter implements TagsContract.Presenter {
     private final SelectTagUseCase selectTagUseCase;
     @NonNull
     private final TagsContract.View tagsView;
+    @NonNull
+    private final TagsContract.ContainerView tagsContainerView;
 
-    public TagsPresenter(@NonNull UseCaseHandler useCaseHandler, @NonNull RetrieveTagsUseCase retrieveTagsUseCase, @NonNull SelectTagUseCase selectTagUseCase, @NonNull TagsContract.View tagsView) {
+    public TagsPresenter(@NonNull UseCaseHandler useCaseHandler, @NonNull RetrieveTagsUseCase retrieveTagsUseCase,
+                         @NonNull SelectTagUseCase selectTagUseCase, @NonNull TagsContract.View tagsView,
+                         @NonNull TagsContract.ContainerView tagsContainerView) {
         this.useCaseHandler = useCaseHandler;
         this.retrieveTagsUseCase = retrieveTagsUseCase;
         this.selectTagUseCase = selectTagUseCase;
         this.tagsView = tagsView;
+        this.tagsContainerView = tagsContainerView;
     }
 
     @Override
@@ -43,11 +48,16 @@ public class TagsPresenter implements TagsContract.Presenter {
     }
 
     @Override
-    public void markAsSelected(Tag tag) {
+    public void select(final Tag tag) {
         useCaseHandler.execute(selectTagUseCase, new SelectTagUseCase.RequestValues(tag), new UseCase.UseCaseCallback<SelectTagUseCase.ResponseValue>() {
             @Override
             public void onSuccess(SelectTagUseCase.ResponseValue response) {
                 tagsView.showTags(response.getTags());
+                if (!tag.isSelected()){
+                    tagsContainerView.addTag(tag);
+                } else {
+                    tagsContainerView.removeTag(tag);
+                }
             }
 
             @Override
@@ -55,6 +65,11 @@ public class TagsPresenter implements TagsContract.Presenter {
                 tagsView.showLoadingTagsError();
             }
         });
+    }
+
+    @Override
+    public void unSelect(Tag tag) {
+
     }
 
 }
