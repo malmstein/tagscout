@@ -21,6 +21,8 @@ import com.malmstein.sample.tagscout.R;
 import com.malmstein.sample.tagscout.data.model.Tag;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class TagsSelected extends RelativeLayout {
@@ -188,16 +190,34 @@ public class TagsSelected extends RelativeLayout {
 
     public void addTag(Tag tag) {
         mTags.add(tag);
+        sortAlphabetically();
         drawTags();
     }
 
+    private void sortAlphabetically() {
+        Collections.sort(mTags, new Comparator<Tag>() {
+            @Override
+            public int compare(final Tag object1, final Tag object2) {
+                return object1.getTag().compareTo(object2.getTag());
+            }
+        });
+    }
+
     public void removeTag(Tag removedTag) {
+        int index = findTagIndex(removedTag);
+        if (index > -1) {
+            remove(index);
+            sortAlphabetically();
+        }
+    }
+
+    private int findTagIndex(Tag tag) {
         for (int i = 0; i < mTags.size(); i++) {
-            if (mTags.get(i).getId() == (removedTag.getId())) {
-                remove(i);
-                return;
+            if (mTags.get(i).getId() == (tag.getId())) {
+                return i;
             }
         }
+        return -1;
     }
 
     private void remove(int position) {
