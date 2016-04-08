@@ -10,10 +10,7 @@ public class TagsContract {
 
         void loadTags();
 
-        void select(Tag tag);
-
-        void unSelect(Tag tag);
-
+        void toggleTagState(Tag tag);
     }
 
     public interface View {

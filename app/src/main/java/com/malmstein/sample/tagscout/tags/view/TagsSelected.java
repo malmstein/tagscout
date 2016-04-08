@@ -116,7 +116,6 @@ public class TagsSelected extends RelativeLayout {
         int indexHeader = 1;
 
         for (Tag item : mTags) {
-            final int position = listIndex - 1;
             final Tag tag = item;
 
             View tagLayout = layoutInflater.inflate(R.layout.view_tag_filter, null);
@@ -131,9 +130,7 @@ public class TagsSelected extends RelativeLayout {
                 @Override
                 public void onClick(View v) {
                     if (mDeleteListener != null) {
-                        Tag targetTag = tag;
-                        remove(position);
-                        mDeleteListener.onTagDeleted(TagsSelected.this, targetTag, position);
+                        mDeleteListener.onTagDeleted(tag);
                     }
                 }
             });
@@ -232,7 +229,7 @@ public class TagsSelected extends RelativeLayout {
     }
 
     public interface Listener {
-        void onTagDeleted(TagsSelected view, Tag tag, int position);
+        void onTagDeleted(Tag tag);
     }
 
     private static int dipToPx(Context c, float dipValue) {

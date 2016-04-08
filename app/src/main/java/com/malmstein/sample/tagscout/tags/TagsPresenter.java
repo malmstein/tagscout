@@ -48,15 +48,15 @@ public class TagsPresenter implements TagsContract.Presenter {
     }
 
     @Override
-    public void select(final Tag tag) {
+    public void toggleTagState(final Tag tag) {
         useCaseHandler.execute(selectTagUseCase, new SelectTagUseCase.RequestValues(tag), new UseCase.UseCaseCallback<SelectTagUseCase.ResponseValue>() {
             @Override
             public void onSuccess(SelectTagUseCase.ResponseValue response) {
                 tagsView.showTags(response.getTags());
-                if (!tag.isSelected()){
-                    tagsContainerView.addTag(tag);
+                if (!tag.isSelected()) {
+                    tagsContainerView.addTag(response.getToggledTag());
                 } else {
-                    tagsContainerView.removeTag(tag);
+                    tagsContainerView.removeTag(response.getToggledTag());
                 }
             }
 
@@ -65,11 +65,6 @@ public class TagsPresenter implements TagsContract.Presenter {
                 tagsView.showLoadingTagsError();
             }
         });
-    }
-
-    @Override
-    public void unSelect(Tag tag) {
-
     }
 
 }

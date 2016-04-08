@@ -67,7 +67,7 @@ public class TagsListView extends FrameLayout implements TagsContract.View{
     TagsAdapter.TagItemListener tagItemListener = new TagsAdapter.TagItemListener() {
         @Override
         public void onTagSelected(Tag selectedTag) {
-            tagsPresenter.select(selectedTag);
+            tagsPresenter.toggleTagState(selectedTag);
         }
     };
 

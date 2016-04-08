@@ -47,11 +47,11 @@ public class TagsContainer extends ScrollView implements TagsContract.ContainerV
 
     @Override
     public void removeTag(Tag tag) {
-       tagsSelected.removeTag(tag);
+        tagsSelected.removeTag(tag);
     }
 
     @Override
-    public void onTagDeleted(TagsSelected view, Tag tag, int position) {
-       tagsPresenter.unSelect(tag);
+    public void onTagDeleted(Tag tag) {
+        tagsPresenter.toggleTagState(tag);
     }
 }

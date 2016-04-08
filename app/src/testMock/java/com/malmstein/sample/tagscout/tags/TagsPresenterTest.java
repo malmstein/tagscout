@@ -100,7 +100,7 @@ public class TagsPresenterTest {
         Tag tag1 = TAGS.get(0);
 
         // When tag is marked as selected
-        tagsPresenter.select(tag1);
+        tagsPresenter.toggleTagState(tag1);
 
         // Then repository is called and task marked complete UI is shown
         verify(tagRepository).toggleTagSelection(eq(tag1));
