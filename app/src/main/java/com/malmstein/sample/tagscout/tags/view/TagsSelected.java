@@ -30,16 +30,12 @@ public class TagsSelected extends RelativeLayout {
     public static final int DEFAULT_LINE_MARGIN = 8;
     public static final int DEFAULT_TAG_MARGIN = 8;
     public static final float DEFAULT_TAG_TEXT_PADDING_LEFT = 8;
-    public static final float DEFAULT_TAG_TEXT_PADDING_TOP = 5;
     public static final float DEFAULT_TAG_TEXT_PADDING_RIGHT = 8;
-    public static final float DEFAULT_TAG_TEXT_PADDING_BOTTOM = 5;
     public static final float LAYOUT_WIDTH_OFFSET = 2;
 
-    public static final float DEFAULT_TAG_LAYOUT_BORDER_SIZE = 0f;
+
     public static final float DEFAULT_TAG_RADIUS = 10;
-    public static final int DEFAULT_TAG_LAYOUT_COLOR = Color.parseColor("#19db78");
-    public static final int DEFAULT_TAG_LAYOUT_COLOR_PRESS = Color.parseColor("#88363636");
-    public static final int DEFAULT_TAG_LAYOUT_BORDER_COLOR = Color.parseColor("#ffffff");
+    public static final int DEFAULT_TAG_LAYOUT_COLOR_PRESSED = Color.parseColor("#88363636");
 
     private List<Tag> mTags = new ArrayList<>();
 
@@ -137,11 +133,11 @@ public class TagsSelected extends RelativeLayout {
 
             float tagWidth = tagView.getPaint().measureText(tag.getTag()) +
                     deletableView.getWidth() +
-                    dipToPx(getContext(), DEFAULT_TAG_TEXT_PADDING_LEFT) +
-                    dipToPx(getContext(), DEFAULT_TAG_TEXT_PADDING_RIGHT);
+                    DEFAULT_TAG_TEXT_PADDING_LEFT +
+                    DEFAULT_TAG_TEXT_PADDING_RIGHT;
 
             LayoutParams tagParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            tagParams.bottomMargin = dipToPx(getContext(), DEFAULT_LINE_MARGIN);
+            tagParams.bottomMargin = DEFAULT_LINE_MARGIN;
 
             if (mWidth <= total + tagWidth + dipToPx(this.getContext(), LAYOUT_WIDTH_OFFSET)) {
                 //need to add in new line
@@ -175,10 +171,9 @@ public class TagsSelected extends RelativeLayout {
         GradientDrawable gdNormal = new GradientDrawable();
         gdNormal.setColor(tagColor);
         gdNormal.setCornerRadius(DEFAULT_TAG_RADIUS);
-        gdNormal.setStroke(dipToPx(getContext(), DEFAULT_TAG_LAYOUT_BORDER_SIZE), tagColor);
 
         GradientDrawable gdPress = new GradientDrawable();
-        gdPress.setColor(DEFAULT_TAG_LAYOUT_COLOR_PRESS);
+        gdPress.setColor(DEFAULT_TAG_LAYOUT_COLOR_PRESSED);
         gdPress.setCornerRadius(DEFAULT_TAG_RADIUS);
         states.addState(new int[]{android.R.attr.state_pressed}, gdPress);
         states.addState(new int[]{}, gdNormal);
