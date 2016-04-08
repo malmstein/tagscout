@@ -3,7 +3,7 @@
   <dimen name="activity_horizontal_margin">16dp</dimen>
   <dimen name="activity_vertical_margin">16dp</dimen>
 
-  <dimen name="tag_container_height">150dp</dimen>
+  <dimen name="tag_container_height">250dp</dimen>
 
   <dimen name="label_title_size">14sp</dimen>
   <dimen name="padding_label_view">10dp</dimen>

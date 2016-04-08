@@ -136,10 +136,13 @@ public class TagsSelected extends RelativeLayout {
                 }
             });
 
-            float tagWidth = tagView.getPaint().measureText(tag.getTag()) + deletableView.getWidth() + 2 * DEFAULT_TAG_TEXT_PADDING_LEFT + 2 * DEFAULT_TAG_TEXT_PADDING_RIGHT;
+            float tagWidth = tagView.getPaint().measureText(tag.getTag()) +
+                    deletableView.getWidth() +
+                    dipToPx(getContext(), DEFAULT_TAG_TEXT_PADDING_LEFT) +
+                    dipToPx(getContext(), DEFAULT_TAG_TEXT_PADDING_RIGHT);
 
             LayoutParams tagParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            tagParams.bottomMargin = DEFAULT_LINE_MARGIN;
+            tagParams.bottomMargin = dipToPx(getContext(), DEFAULT_LINE_MARGIN);
 
             if (mWidth <= total + tagWidth + dipToPx(this.getContext(), LAYOUT_WIDTH_OFFSET)) {
                 //need to add in new line
@@ -154,7 +157,7 @@ public class TagsSelected extends RelativeLayout {
                 //not header of the line
                 if (listIndex != indexHeader) {
                     tagParams.addRule(RelativeLayout.RIGHT_OF, listIndex - 1);
-                    tagParams.leftMargin = DEFAULT_TAG_MARGIN;
+                    tagParams.leftMargin = dipToPx(getContext(), DEFAULT_TAG_MARGIN);
                     total += DEFAULT_TAG_MARGIN;
                 }
 
