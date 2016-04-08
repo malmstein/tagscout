@@ -121,7 +121,7 @@ public class TagsSelected extends RelativeLayout {
 
             View tagLayout = layoutInflater.inflate(R.layout.view_tag_filter, null);
             tagLayout.setId(listIndex);
-            tagLayout.setBackgroundDrawable(getSelector(tag));
+            tagLayout.setBackground(getSelector(tag));
 
             TextView tagView = (TextView) tagLayout.findViewById(R.id.tag_label);
             tagView.setText(tag.getTag());
@@ -174,10 +174,11 @@ public class TagsSelected extends RelativeLayout {
     private Drawable getSelector(Tag tag) {
         StateListDrawable states = new StateListDrawable();
 
+        int tagColor = Color.parseColor("#" + tag.getColor());
         GradientDrawable gdNormal = new GradientDrawable();
-        gdNormal.setColor(Color.parseColor(tag.getColor()));
+        gdNormal.setColor(tagColor);
         gdNormal.setCornerRadius(DEFAULT_TAG_RADIUS);
-        gdNormal.setStroke(dipToPx(getContext(), DEFAULT_TAG_LAYOUT_BORDER_SIZE), Color.parseColor(tag.getColor()));
+        gdNormal.setStroke(dipToPx(getContext(), DEFAULT_TAG_LAYOUT_BORDER_SIZE), tagColor);
 
         GradientDrawable gdPress = new GradientDrawable();
         gdPress.setColor(DEFAULT_TAG_LAYOUT_COLOR_PRESS);

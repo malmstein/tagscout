@@ -46,7 +46,7 @@ public class Tag {
     }
 
     public String getColor() {
-        return "#" + color;
+        return color;
     }
 
     public boolean isSelected() {
