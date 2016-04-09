@@ -2,4 +2,5 @@
   <string name="app_name">Tag Scout</string>
 
   <string name="title_add_tags">Add Tags</string>
+  <string name="tag_delete">X</string>
 </resources>

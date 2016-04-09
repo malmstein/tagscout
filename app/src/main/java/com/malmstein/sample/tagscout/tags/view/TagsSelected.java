@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,10 +28,8 @@ public class TagsSelected extends RelativeLayout {
 
     public static final int DEFAULT_LINE_MARGIN = 8;
     public static final int DEFAULT_TAG_MARGIN = 8;
-    public static final float DEFAULT_TAG_TEXT_PADDING_LEFT = 8;
-    public static final float DEFAULT_TAG_TEXT_PADDING_RIGHT = 8;
+    public static final float DEFAULT_INNER_PADDING = 10;
     public static final float LAYOUT_WIDTH_OFFSET = 2;
-
 
     public static final float DEFAULT_TAG_RADIUS = 10;
     public static final int DEFAULT_TAG_LAYOUT_COLOR_PRESSED = Color.parseColor("#88363636");
@@ -42,6 +39,11 @@ public class TagsSelected extends RelativeLayout {
     private LayoutInflater layoutInflater;
     private ViewTreeObserver viewTreeObserver;
     private Listener mDeleteListener;
+
+    private int defaultPadding;
+    private int lineMargin;
+    private int tagMargin;
+    private int offset;
 
     private int mWidth;
     private boolean mInitialized = false;
@@ -74,6 +76,10 @@ public class TagsSelected extends RelativeLayout {
             }
         });
 
+        defaultPadding = dipToPx(getContext(), DEFAULT_INNER_PADDING);
+        lineMargin = dipToPx(getContext(), DEFAULT_LINE_MARGIN);
+        tagMargin = dipToPx(getContext(), DEFAULT_TAG_MARGIN);
+        offset = dipToPx(getContext(), LAYOUT_WIDTH_OFFSET);
     }
 
     @Override
@@ -121,7 +127,7 @@ public class TagsSelected extends RelativeLayout {
             TextView tagView = (TextView) tagLayout.findViewById(R.id.tag_label);
             tagView.setText(tag.getTag());
 
-            ImageView deletableView = (ImageView) tagLayout.findViewById(R.id.tag_delete);
+            TextView deletableView = (TextView) tagLayout.findViewById(R.id.tag_delete);
             deletableView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -131,15 +137,13 @@ public class TagsSelected extends RelativeLayout {
                 }
             });
 
-            float tagWidth = tagView.getPaint().measureText(tag.getTag()) +
-                    deletableView.getWidth() +
-                    DEFAULT_TAG_TEXT_PADDING_LEFT +
-                    DEFAULT_TAG_TEXT_PADDING_RIGHT;
+            float tagWidth = tagView.getPaint().measureText(tag.getTag()) + defaultPadding + offset;
+            tagWidth += deletableView.getPaint().measureText("X") + defaultPadding + defaultPadding;
 
             LayoutParams tagParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            tagParams.bottomMargin = DEFAULT_LINE_MARGIN;
+            tagParams.bottomMargin = lineMargin;
 
-            if (mWidth <= total + tagWidth + dipToPx(this.getContext(), LAYOUT_WIDTH_OFFSET)) {
+            if (mWidth <= total + tagWidth) {
                 //need to add in new line
                 tagParams.addRule(RelativeLayout.BELOW, indexBottom);
                 // initialize total param (layout padding left & layout padding right)
@@ -152,8 +156,8 @@ public class TagsSelected extends RelativeLayout {
                 //not header of the line
                 if (listIndex != indexHeader) {
                     tagParams.addRule(RelativeLayout.RIGHT_OF, listIndex - 1);
-                    tagParams.leftMargin = dipToPx(getContext(), DEFAULT_TAG_MARGIN);
-                    total += DEFAULT_TAG_MARGIN;
+                    tagParams.leftMargin = tagMargin;
+                    total += tagMargin;
                 }
 
             }
