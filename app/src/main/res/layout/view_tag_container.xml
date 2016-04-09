@@ -4,8 +4,8 @@
   android:layout_height="@dimen/tag_container_height"
   android:padding="@dimen/tag_container_padding">
 
-  <com.malmstein.sample.tagscout.tags.view.TagsSelected
-    android:id="@+id/tags_selected"
+  <com.malmstein.sample.tagscout.tags.view.TagFilter
+    android:id="@+id/tag_filter"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
 

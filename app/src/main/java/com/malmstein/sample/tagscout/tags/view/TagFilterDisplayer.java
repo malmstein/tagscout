@@ -1,55 +1,45 @@
 package com.malmstein.sample.tagscout.tags.view;
 
-import android.content.Context;
-
 import com.malmstein.sample.tagscout.data.model.Tag;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class TagFilterDisplayer {
 
-    public static final int DEFAULT_LINE_MARGIN = 8;
-    public static final int DEFAULT_TAG_MARGIN = 8;
-    public static final float DEFAULT_INNER_PADDING = 10;
-    public static final float LAYOUT_WIDTH_OFFSET = 2;
-
-    public static final float DEFAULT_TAG_RADIUS = 10;
-
-    private int defaultPadding;
-    private int lineMargin;
-    private int tagMargin;
-    private int offset;
-
     private int viewWidth;
+    private int spaceUsed;
 
-    private UnitConversor unitConversor;
     private List<Tag> tags = new ArrayList<>();
-
-    public TagFilterDisplayer(Context context, UnitConversor unitConversor) {
-        this.unitConversor = unitConversor;
-        defaultPadding = unitConversor.dipToPx(context, DEFAULT_INNER_PADDING);
-        lineMargin = unitConversor.dipToPx(context, DEFAULT_LINE_MARGIN);
-        tagMargin = unitConversor.dipToPx(context, DEFAULT_TAG_MARGIN);
-        offset = unitConversor.dipToPx(context, LAYOUT_WIDTH_OFFSET);
-    }
-
-    public void drawTags() {
-
-    }
 
     public void setWidth(int width) {
         viewWidth = width;
     }
 
+    public void setSpaceUsed(int total){
+        spaceUsed = total;
+    }
+
+    public void addToSpaceUsed(float total){
+        spaceUsed += total;
+    }
+
+    public boolean fitsInSameRow(float tagWidth) {
+        return viewWidth > spaceUsed + tagWidth;
+    }
+
     public void addTag(Tag tag) {
         tags.add(tag);
+        sortAlphabetically();
     }
 
     public void removeTag(Tag tag) {
         int index = findTagIndex(tag);
         if (index > -1) {
             tags.remove(index);
+            sortAlphabetically();
         }
     }
 
@@ -66,8 +56,13 @@ public class TagFilterDisplayer {
         return tags;
     }
 
-    public interface Listener {
-
+    private void sortAlphabetically() {
+        Collections.sort(tags, new Comparator<Tag>() {
+            @Override
+            public int compare(final Tag object1, final Tag object2) {
+                return object1.getTag().compareTo(object2.getTag());
+            }
+        });
     }
 
 }

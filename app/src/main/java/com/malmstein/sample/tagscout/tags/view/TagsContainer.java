@@ -10,10 +10,10 @@ import com.malmstein.sample.tagscout.data.model.Tag;
 import com.malmstein.sample.tagscout.tags.TagsPresenter;
 import com.malmstein.sample.tagscout.tags.domain.TagsContract;
 
-public class TagsContainer extends ScrollView implements TagsContract.ContainerView, TagsSelected.Listener {
+public class TagsContainer extends ScrollView implements TagsContract.ContainerView, TagFilter.Listener {
 
     private TagsPresenter tagsPresenter;
-    private TagsSelected tagsSelected;
+    private TagFilter tagFilter;
 
     public TagsContainer(Context context) {
         super(context);
@@ -32,8 +32,8 @@ public class TagsContainer extends ScrollView implements TagsContract.ContainerV
         super.onFinishInflate();
         LayoutInflater.from(getContext()).inflate(R.layout.view_tag_container, this, true);
 
-        tagsSelected = (TagsSelected) findViewById(R.id.tags_selected);
-        tagsSelected.setOnTagDeleteListener(this);
+        tagFilter = (TagFilter) findViewById(R.id.tag_filter);
+        tagFilter.setOnTagDeleteListener(this);
     }
 
     public void setPresenter(TagsPresenter tagsPresenter) {
@@ -42,12 +42,12 @@ public class TagsContainer extends ScrollView implements TagsContract.ContainerV
 
     @Override
     public void addTag(Tag tag) {
-        tagsSelected.addTag(tag);
+        tagFilter.addTag(tag);
     }
 
     @Override
     public void removeTag(Tag tag) {
-        tagsSelected.removeTag(tag);
+        tagFilter.removeTag(tag);
     }
 
     @Override
