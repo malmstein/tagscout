@@ -3,6 +3,7 @@ package com.malmstein.sample.tagscout.injection;
 import com.malmstein.sample.tagscout.data.FakeTagRemoteDataSource;
 import com.malmstein.sample.tagscout.data.TagRepository;
 import com.malmstein.sample.tagscout.domain.UseCaseHandler;
+import com.malmstein.sample.tagscout.tags.domain.FilterTagsUseCase;
 import com.malmstein.sample.tagscout.tags.domain.RetrieveTagsUseCase;
 import com.malmstein.sample.tagscout.tags.domain.SelectTagUseCase;
 
@@ -27,6 +28,10 @@ public class Injection {
 
     public static SelectTagUseCase provideSelectTagUseCase(){
         return new SelectTagUseCase(Injection.provideTagRepository());
+    }
+
+    public static FilterTagsUseCase provideFilterTagsUseCase() {
+        return new FilterTagsUseCase(Injection.provideTagRepository());
     }
 
 }

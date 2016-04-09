@@ -4,24 +4,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.malmstein.sample.tagscout.R;
 import com.malmstein.sample.tagscout.data.model.Tag;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class TagsAdapter extends BaseAdapter implements Filterable {
+public class TagsAdapter extends BaseAdapter {
 
     private List<Tag> tags;
-    private List<Tag> filteredTags;
 
     private TagItemListener tagItemListener;
-    private TagsFilter tagsFilter;
 
     public TagsAdapter(List<Tag> tags, TagItemListener itemListener) {
         setList(tags);
@@ -35,17 +30,16 @@ public class TagsAdapter extends BaseAdapter implements Filterable {
 
     private void setList(List<Tag> tags) {
         this.tags = tags;
-        this.filteredTags = tags;
     }
 
     @Override
     public int getCount() {
-        return filteredTags.size();
+        return tags.size();
     }
 
     @Override
     public Tag getItem(int i) {
-        return filteredTags.get(i);
+        return tags.get(i);
     }
 
     @Override
@@ -79,44 +73,6 @@ public class TagsAdapter extends BaseAdapter implements Filterable {
         });
 
         return rowView;
-    }
-
-    @Override
-    public Filter getFilter() {
-        if (tagsFilter == null) {
-            tagsFilter = new TagsFilter();
-        }
-
-        return tagsFilter;
-    }
-
-    private class TagsFilter extends Filter {
-
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            FilterResults results = new FilterResults();
-            if (constraint == null || constraint.length() == 0) {
-                results.values = tags;
-                results.count = tags.size();
-            } else {
-                ArrayList<Tag> filteredTags = new ArrayList<>();
-                for (Tag tag : tags) {
-                    if (tag.getTag().toUpperCase().contains(constraint.toString().toUpperCase())) {
-                        filteredTags.add(tag);
-                    }
-                }
-                results.values = filteredTags;
-                results.count = filteredTags.size();
-            }
-
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredTags = (ArrayList<Tag>) results.values;
-            notifyDataSetChanged();
-        }
     }
 
     public static class ViewHolder {

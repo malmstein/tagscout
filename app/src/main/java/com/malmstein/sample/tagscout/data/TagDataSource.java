@@ -15,6 +15,8 @@ public interface TagDataSource {
 
     void getTags(LoadTagsCallback callback);
 
+    void filterTags(String query, LoadTagsCallback callback);
+
     void deleteAllTags();
 
     void toggleTagSelection(Tag tag);

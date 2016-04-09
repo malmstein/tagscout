@@ -59,6 +59,11 @@ public class RemoteTagDataSource implements TagDataSource {
     }
 
     @Override
+    public void filterTags(String query, LoadTagsCallback callback) {
+        // we'd do a remote search call to the api
+    }
+
+    @Override
     public void deleteAllTags() {
         // no-op
     }

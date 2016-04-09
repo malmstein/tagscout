@@ -56,7 +56,7 @@ public class TagRepository implements TagDataSource {
             tagRemoteSource.getTags(new LoadTagsCallback() {
                 @Override
                 public void onTagsLoaded(List<Tag> tags) {
-                     processLoadedTags(tags, callback);
+                    processLoadedTags(tags, callback);
                 }
 
                 @Override
@@ -65,6 +65,23 @@ public class TagRepository implements TagDataSource {
                 }
             });
         }
+    }
+
+    @Override
+    public void filterTags(String query, final LoadTagsCallback callback) {
+        List<Tag> filteredTags = filterTags(query);
+        callback.onTagsLoaded(filteredTags);
+    }
+
+    protected List<Tag> filterTags(String query) {
+        List<Tag> tags = getCachedTags();
+        ArrayList<Tag> filteredTags = new ArrayList<>();
+        for (Tag tag : tags) {
+            if (tag.getTag().toUpperCase().contains(query.toUpperCase())) {
+                filteredTags.add(tag);
+            }
+        }
+        return filteredTags;
     }
 
     @Override
@@ -99,12 +116,12 @@ public class TagRepository implements TagDataSource {
         return cachedTags == null ? null : new ArrayList<>(cachedTags.values());
     }
 
-    public Tag getCachedTag(int id){
+    public Tag getCachedTag(int id) {
         return cachedTags.get(id);
     }
 
     @VisibleForTesting
-    protected void cleanCache(){
+    protected void cleanCache() {
         if (cachedTags == null) {
             cachedTags = new LinkedHashMap<>();
         }
@@ -118,6 +135,5 @@ public class TagRepository implements TagDataSource {
     public static void destroyInstance() {
         INSTANCE = null;
     }
-
 
 }

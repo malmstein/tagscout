@@ -5,29 +5,28 @@ import android.support.annotation.NonNull;
 import com.malmstein.sample.tagscout.data.model.Tag;
 import com.malmstein.sample.tagscout.domain.UseCase;
 import com.malmstein.sample.tagscout.domain.UseCaseHandler;
+import com.malmstein.sample.tagscout.tags.domain.FilterTagsUseCase;
 import com.malmstein.sample.tagscout.tags.domain.RetrieveTagsUseCase;
 import com.malmstein.sample.tagscout.tags.domain.SelectTagUseCase;
 import com.malmstein.sample.tagscout.tags.domain.TagsContract;
 
 public class TagsPresenter implements TagsContract.Presenter {
 
-    @NonNull
     private final UseCaseHandler useCaseHandler;
-    @NonNull
     private final RetrieveTagsUseCase retrieveTagsUseCase;
-    @NonNull
     private final SelectTagUseCase selectTagUseCase;
-    @NonNull
+    private final FilterTagsUseCase filterTagsUseCase;
+
     private final TagsContract.View tagsView;
-    @NonNull
     private final TagsContract.ContainerView tagsContainerView;
 
     public TagsPresenter(@NonNull UseCaseHandler useCaseHandler, @NonNull RetrieveTagsUseCase retrieveTagsUseCase,
-                         @NonNull SelectTagUseCase selectTagUseCase, @NonNull TagsContract.View tagsView,
-                         @NonNull TagsContract.ContainerView tagsContainerView) {
+                         @NonNull SelectTagUseCase selectTagUseCase, @NonNull FilterTagsUseCase filterTagsUseCase,
+                         @NonNull TagsContract.View tagsView, @NonNull TagsContract.ContainerView tagsContainerView) {
         this.useCaseHandler = useCaseHandler;
         this.retrieveTagsUseCase = retrieveTagsUseCase;
         this.selectTagUseCase = selectTagUseCase;
+        this.filterTagsUseCase = filterTagsUseCase;
         this.tagsView = tagsView;
         this.tagsContainerView = tagsContainerView;
     }
@@ -70,10 +69,10 @@ public class TagsPresenter implements TagsContract.Presenter {
 
     @Override
     public void filter(final String query) {
-        useCaseHandler.execute(retrieveTagsUseCase, null, new UseCase.UseCaseCallback<RetrieveTagsUseCase.ResponseValue>() {
+        useCaseHandler.execute(filterTagsUseCase, new FilterTagsUseCase.RequestValues(query), new UseCase.UseCaseCallback<FilterTagsUseCase.ResponseValue>() {
             @Override
-            public void onSuccess(RetrieveTagsUseCase.ResponseValue response) {
-                tagsView.filter(query);
+            public void onSuccess(FilterTagsUseCase.ResponseValue response) {
+                tagsView.showTags(response.getTags());
             }
 
             @Override

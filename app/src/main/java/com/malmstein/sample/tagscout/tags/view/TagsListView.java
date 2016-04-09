@@ -56,11 +56,6 @@ public class TagsListView extends FrameLayout implements TagsContract.View {
         Snackbar.make(this, "Couldn't load tags", Snackbar.LENGTH_LONG).show();
     }
 
-    @Override
-    public void filter(String query) {
-        tagsAdapter.getFilter().filter(query);
-    }
-
     private void setAdapter() {
         if (tagsAdapter == null) {
             tagsAdapter = new TagsAdapter(new ArrayList<Tag>(), tagItemListener);

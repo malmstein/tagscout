@@ -98,7 +98,6 @@ public class TagRepositoryTest {
         tagRepository.getTags(loadTagsCallback);
 
         // And the remote data source data is  available
-
         verify(tagRemoteDataSource).getTags(tagsCallbackArgumentCaptor.capture());
         tagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
 
@@ -139,6 +138,24 @@ public class TagRepositoryTest {
         // Then the service API and persistent repository are called and the cache is updated
         verify(tagRemoteDataSource).toggleTagSelection(TAGS.get(0));
         assertThat(tagRepository.getCachedTag(TAGS.get(0).getId()).isSelected(), is(true));
+    }
+
+    @Test
+    public void filterTag_returnsFilteredTags() {
+        // Given the cache is empty
+        tagRepository.cleanCache();
+
+        // When calling getTags in the repository
+        tagRepository.getTags(loadTagsCallback);
+
+        verify(tagRemoteDataSource).getTags(tagsCallbackArgumentCaptor.capture());
+        tagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
+
+        verify(loadTagsCallback).onTagsLoaded(TAGS);
+
+        // Querying will return a filtered list
+        String query = "1";
+        assertThat(tagRepository.filterTags(query).size(), is(1));
     }
 
 }

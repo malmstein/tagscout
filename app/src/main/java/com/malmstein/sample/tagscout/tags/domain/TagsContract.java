@@ -21,8 +21,6 @@ public class TagsContract {
 
         void showLoadingTagsError();
 
-        void filter(String query);
-
     }
 
     public interface ContainerView {

@@ -97,4 +97,17 @@ public class TagsPresenterTest {
         verify(tagsView).showLoadingTagsError();
     }
 
+    @Test
+    public void filtersListWhenEditTextSearched(){
+        String query = "aw";
+        tagsPresenter.filter(query);
+
+        // And there is some data
+        verify(tagRepository).getTags(loadTagsCallbackArgumentCaptor.capture());
+        loadTagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
+
+        // Then the view shows the proper amount of tags
+        verify(tagsView).filter(query);
+    }
+
 }

@@ -23,11 +23,13 @@ public class TagsActivity extends AppCompatActivity {
         tagsView = (TagsListView) findViewById(R.id.tags_view);
         tagsContainerView = (TagsContainerView) findViewById(R.id.tags_container);
 
-        tagsPresenter = new TagsPresenter(Injection.provideUseCaseHandler(),
-                                          Injection.provideRetrieveTagsUseCase(),
-                                          Injection.provideSelectTagUseCase(),
-                                          tagsView,
-                                          tagsContainerView
+        tagsPresenter = new TagsPresenter(
+                Injection.provideUseCaseHandler(),
+                Injection.provideRetrieveTagsUseCase(),
+                Injection.provideSelectTagUseCase(),
+                Injection.provideFilterTagsUseCase(),
+                tagsView,
+                tagsContainerView
         );
 
         tagsView.setPresenter(tagsPresenter);

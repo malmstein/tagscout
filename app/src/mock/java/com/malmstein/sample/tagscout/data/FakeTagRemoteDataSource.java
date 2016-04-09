@@ -40,6 +40,11 @@ public class FakeTagRemoteDataSource implements TagDataSource {
     }
 
     @Override
+    public void filterTags(String query, LoadTagsCallback callback) {
+        // this would trigger a remote api call
+    }
+
+    @Override
     public void deleteAllTags() {
         if (tags != null) {
             tags.clear();
