@@ -11,6 +11,8 @@ public class TagsContract {
         void loadTags();
 
         void toggleTagState(Tag tag);
+
+        void filter(String query);
     }
 
     public interface View {
@@ -18,6 +20,8 @@ public class TagsContract {
         void showTags(List<Tag> tags);
 
         void showLoadingTagsError();
+
+        void filter(String query);
 
     }
 

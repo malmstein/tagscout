@@ -68,4 +68,19 @@ public class TagsPresenter implements TagsContract.Presenter {
         });
     }
 
+    @Override
+    public void filter(final String query) {
+        useCaseHandler.execute(retrieveTagsUseCase, null, new UseCase.UseCaseCallback<RetrieveTagsUseCase.ResponseValue>() {
+            @Override
+            public void onSuccess(RetrieveTagsUseCase.ResponseValue response) {
+                tagsView.filter(query);
+            }
+
+            @Override
+            public void onError(Error error) {
+                tagsView.showLoadingTagsError();
+            }
+        });
+    }
+
 }

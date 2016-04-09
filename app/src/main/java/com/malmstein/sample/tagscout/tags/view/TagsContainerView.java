@@ -1,8 +1,11 @@
 package com.malmstein.sample.tagscout.tags.view;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.EditText;
 import android.widget.ScrollView;
 
 import com.malmstein.sample.tagscout.R;
@@ -16,6 +19,7 @@ public class TagsContainerView extends ScrollView implements TagsContract.Contai
 
     private TagsPresenter tagsPresenter;
     private TagFilterView tagFilter;
+    private EditText tagSearchView;
 
     public TagsContainerView(Context context) {
         super(context);
@@ -36,6 +40,24 @@ public class TagsContainerView extends ScrollView implements TagsContract.Contai
 
         tagFilter = (TagFilterView) findViewById(R.id.tag_filter);
         tagFilter.setOnTagDeleteListener(this);
+
+        tagSearchView = (EditText) findViewById(R.id.tag_search_view);
+        tagSearchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // no-op
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                tagsPresenter.filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // no-op
+            }
+        });
     }
 
     public void setPresenter(TagsPresenter tagsPresenter) {

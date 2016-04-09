@@ -9,9 +9,6 @@ import com.malmstein.sample.tagscout.domain.UseCase;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * TODO: Javadoc
- */
 public class RetrieveTagsUseCase extends UseCase<RetrieveTagsUseCase.RequestValues, RetrieveTagsUseCase.ResponseValue> {
 
     private final TagRepository tagRepository;

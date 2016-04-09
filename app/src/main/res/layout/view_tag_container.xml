@@ -9,6 +9,7 @@
     android:id="@+id/tag_search_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:singleLine="true"
     android:drawableLeft="@drawable/ic_icon_search"
     android:drawablePadding="@dimen/tag_search_view_padding"
     android:hint="@string/tag_search_hint" />
