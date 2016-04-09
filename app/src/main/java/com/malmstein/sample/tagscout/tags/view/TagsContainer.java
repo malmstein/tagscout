@@ -43,7 +43,7 @@ public class TagsContainer extends ScrollView implements TagsContract.ContainerV
     }
 
     @Override
-    public void showTags(List<Tag> tags) {
+    public void showSelectedTags(List<Tag> tags) {
         tagFilter.showTags(tags);
     }
 

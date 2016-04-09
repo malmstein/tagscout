@@ -6,6 +6,7 @@ import com.malmstein.sample.tagscout.data.model.Tag;
 import com.malmstein.sample.tagscout.domain.DataNotAvailableError;
 import com.malmstein.sample.tagscout.domain.UseCase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,13 +50,23 @@ public class RetrieveTagsUseCase extends UseCase<RetrieveTagsUseCase.RequestValu
 
     public class ResponseValue extends UseCase.ResponseValue {
         private List<Tag> tags;
+        private List<Tag> selectedTags = new ArrayList<>();
 
         public ResponseValue(List<Tag> tags) {
             this.tags = tags;
+            for (Tag tag : tags) {
+                if (tag.isSelected()) {
+                    selectedTags.add(tag);
+                }
+            }
         }
 
         public List<Tag> getTags() {
             return tags;
+        }
+
+        public List<Tag> getSelectedTags() {
+            return selectedTags;
         }
     }
 }

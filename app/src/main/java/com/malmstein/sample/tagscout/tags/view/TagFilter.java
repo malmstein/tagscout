@@ -228,9 +228,7 @@ public class TagFilter extends RelativeLayout {
 
     public void showTags(List<Tag> tags) {
         for (Tag tag : tags) {
-            if (tag.isSelected()){
-                displayer.addTag(tag);
-            }
+            displayer.addTag(tag);
         }
         drawTags();
     }

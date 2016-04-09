@@ -23,7 +23,7 @@ public class TagsContract {
 
     public interface ContainerView {
 
-        void showTags(List<Tag> tags);
+        void showSelectedTags(List<Tag> tags);
 
         void addTag(Tag tag);
 

@@ -20,7 +20,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
 public class TagsPresenterTest {
@@ -40,6 +39,10 @@ public class TagsPresenterTest {
 
     @Captor
     private ArgumentCaptor<TagDataSource.LoadTagsCallback> loadTagsCallbackArgumentCaptor;
+
+    @Captor
+    private ArgumentCaptor<Tag> toggleTagArgumentCaptor;
+
 
     @Before
     public void setup() {
@@ -77,8 +80,8 @@ public class TagsPresenterTest {
         // Then the view shows the proper amount of tags
         ArgumentCaptor<List> showTagsArgumentCaptor = ArgumentCaptor.forClass(List.class);
         verify(tagsView).showTags(showTagsArgumentCaptor.capture());
-        verify(tagsContainerView).showTags(showTagsArgumentCaptor.capture());
-        assertTrue(showTagsArgumentCaptor.getValue().size() == 2);
+        verify(tagsContainerView).showSelectedTags(showTagsArgumentCaptor.capture());
+        assertTrue(showTagsArgumentCaptor.getAllValues().get(0).size() == 2);
     }
 
     @Test
@@ -94,39 +97,4 @@ public class TagsPresenterTest {
         verify(tagsView).showLoadingTagsError();
     }
 
-    @Test
-    public void selectedTag_ShowsTagMarkedSelected() {
-        // Given a selected tag
-        Tag tag1 = TAGS.get(0);
-
-        // When tag is marked as selected
-        tagsPresenter.toggleTagState(tag1);
-
-        // Then repository is called
-        verify(tagRepository).toggleTagSelection(any(Tag.class));
-
-        // And all tags are updated in the list
-        verify(tagsView).showTags(any(List.class));
-
-        // And the tag is removed from the container
-        verify(tagsContainerView).removeTag(any(Tag.class));
-    }
-
-    @Test
-    public void unSelectedTag_RemoveTagMarkedSelected() {
-        // Given a unselectedTag tag
-        Tag tag1 = TAGS.get(1);
-
-        // When tag is marked as selected
-        tagsPresenter.toggleTagState(tag1);
-
-        // Then repository is called
-        verify(tagRepository).toggleTagSelection(any(Tag.class));
-
-        // And all tags are updated in the list
-        verify(tagsView).showTags(any(List.class));
-
-        // And the tag is added to the container
-        verify(tagsContainerView).addTag(any(Tag.class));
-    }
 }
