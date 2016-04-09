@@ -8,7 +8,7 @@ import org.mockito.MockitoAnnotations;
 
 import static junit.framework.Assert.*;
 
-public class TagFilterDisplayerTest {
+public class TagFilterViewDisplayerTest {
 
     TagFilterDisplayer displayer;
 
