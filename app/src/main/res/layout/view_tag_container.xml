@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="@dimen/tag_container_height"
-  android:padding="@dimen/tag_container_padding">
+  android:padding="@dimen/activity_horizontal_margin">
 
   <com.malmstein.sample.tagscout.tags.view.TagFilter
     android:id="@+id/tag_filter"
