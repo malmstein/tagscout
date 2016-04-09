@@ -16,8 +16,10 @@ public class SelectTagUseCase extends UseCase<SelectTagUseCase.RequestValues, Se
 
     @Override
     protected void executeUseCase(RequestValues requestValues) {
-        tagRepository.toggleTagSelection(requestValues.getSelectedTag());
-        getUseCaseCallback().onSuccess(new ResponseValue(tagRepository.getCachedTags()));
+        Tag selectedTag = requestValues.getSelectedTag();
+        tagRepository.toggleTagSelection(selectedTag);
+        Tag toggledTag = tagRepository.getCachedTag(selectedTag.getId());
+        getUseCaseCallback().onSuccess(new ResponseValue(tagRepository.getCachedTags(), toggledTag));
     }
 
     public static class RequestValues extends UseCase.RequestValues {
@@ -36,13 +38,19 @@ public class SelectTagUseCase extends UseCase<SelectTagUseCase.RequestValues, Se
     public class ResponseValue extends UseCase.ResponseValue {
 
         private List<Tag> tags;
+        private Tag toggledTag;
 
-        public ResponseValue(List<Tag> tags) {
+        public ResponseValue(List<Tag> tags, Tag toggledTag) {
             this.tags = tags;
+            this.toggledTag = toggledTag;
         }
 
         public List<Tag> getTags() {
             return tags;
+        }
+
+        public Tag getToggledTag() {
+            return toggledTag;
         }
     }
 

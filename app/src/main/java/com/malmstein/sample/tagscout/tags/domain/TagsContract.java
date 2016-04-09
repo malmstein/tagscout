@@ -10,7 +10,7 @@ public class TagsContract {
 
         void loadTags();
 
-        void markAsSelected(Tag tag);
+        void toggleTagState(Tag tag);
     }
 
     public interface View {
@@ -20,4 +20,15 @@ public class TagsContract {
         void showLoadingTagsError();
 
     }
+
+    public interface ContainerView {
+
+        void showSelectedTags(List<Tag> tags);
+
+        void addTag(Tag tag);
+
+        void removeTag(Tag tag);
+
+    }
+
 }

@@ -20,8 +20,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 
 public class TagsPresenterTest {
@@ -34,34 +32,44 @@ public class TagsPresenterTest {
     @Mock
     private TagsContract.View tagsView;
 
+    @Mock
+    private TagsContract.ContainerView tagsContainerView;
+
     private TagsPresenter tagsPresenter;
 
     @Captor
     private ArgumentCaptor<TagDataSource.LoadTagsCallback> loadTagsCallbackArgumentCaptor;
 
+    @Captor
+    private ArgumentCaptor<Tag> toggleTagArgumentCaptor;
+
+
     @Before
-    public void setupTagsPresenter() {
+    public void setup() {
         MockitoAnnotations.initMocks(this);
 
         givenMockTags();
         givenTagsPresenter();
     }
 
-    private void givenTagsPresenter(){
+    private void givenTagsPresenter() {
         UseCaseHandler useCaseHandler = new UseCaseHandler(new TestUseCaseScheduler());
         RetrieveTagsUseCase retrieveTagsUseCase = new RetrieveTagsUseCase(tagRepository);
 
-        tagsPresenter = new TagsPresenter(useCaseHandler, retrieveTagsUseCase, Injection.provideSelectTagUseCase(), tagsView);
+        tagsPresenter = new TagsPresenter(useCaseHandler, retrieveTagsUseCase,
+                                          Injection.provideSelectTagUseCase(), tagsView,
+                                          tagsContainerView
+        );
     }
 
-    private void givenMockTags(){
+    private void givenMockTags() {
         TAGS = new ArrayList<>();
-        TAGS.add(new Tag(1, "text1", "color1"));
-        TAGS.add(new Tag(2, "text2", "color2"));
+        TAGS.add(new Tag(1, "text1", "color1", true));
+        TAGS.add(new Tag(2, "text2", "color2", false));
     }
 
     @Test
-    public void loadAllTagsFromRepositoryAndLoadIntoView(){
+    public void loadAllTagsFromRepositoryAndLoadIntoView() {
         // When tasks are loaded
         tagsPresenter.loadTags();
 
@@ -72,7 +80,8 @@ public class TagsPresenterTest {
         // Then the view shows the proper amount of tags
         ArgumentCaptor<List> showTagsArgumentCaptor = ArgumentCaptor.forClass(List.class);
         verify(tagsView).showTags(showTagsArgumentCaptor.capture());
-        assertTrue(showTagsArgumentCaptor.getValue().size() == 2);
+        verify(tagsContainerView).showSelectedTags(showTagsArgumentCaptor.capture());
+        assertTrue(showTagsArgumentCaptor.getAllValues().get(0).size() == 2);
     }
 
     @Test
@@ -88,16 +97,4 @@ public class TagsPresenterTest {
         verify(tagsView).showLoadingTagsError();
     }
 
-    @Test
-    public void selectedTag_ShowsTagMarkedSelected() {
-        // Given a stubbed tag
-        Tag tag1 = TAGS.get(0);
-
-        // When tag is marked as selected
-        tagsPresenter.markAsSelected(tag1);
-
-        // Then repository is called and task marked complete UI is shown
-        verify(tagRepository).toggleTagSelection(eq(tag1));
-        verify(tagsView).showTags(any(List.class));
-    }
 }

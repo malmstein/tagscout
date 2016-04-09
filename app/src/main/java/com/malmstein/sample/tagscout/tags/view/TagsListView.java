@@ -9,35 +9,36 @@ import android.widget.ListView;
 
 import com.malmstein.sample.tagscout.R;
 import com.malmstein.sample.tagscout.data.model.Tag;
+import com.malmstein.sample.tagscout.tags.TagsAdapter;
 import com.malmstein.sample.tagscout.tags.TagsPresenter;
 import com.malmstein.sample.tagscout.tags.domain.TagsContract;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TagsView extends FrameLayout implements TagsContract.View{
+public class TagsListView extends FrameLayout implements TagsContract.View{
 
     private TagsPresenter tagsPresenter;
 
     private TagsAdapter tagsAdapter;
     private ListView tagsList;
 
-    public TagsView(Context context) {
+    public TagsListView(Context context) {
         super(context);
     }
 
-    public TagsView(Context context, AttributeSet attrs) {
+    public TagsListView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public TagsView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public TagsListView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        LayoutInflater.from(getContext()).inflate(R.layout.view_tags_view, this, true);
+        LayoutInflater.from(getContext()).inflate(R.layout.view_tag_list, this, true);
         tagsList = (ListView) findViewById(R.id.tags_list);
         setAdapter();
     }
@@ -66,7 +67,7 @@ public class TagsView extends FrameLayout implements TagsContract.View{
     TagsAdapter.TagItemListener tagItemListener = new TagsAdapter.TagItemListener() {
         @Override
         public void onTagSelected(Tag selectedTag) {
-            tagsPresenter.markAsSelected(selectedTag);
+            tagsPresenter.toggleTagState(selectedTag);
         }
     };
 
