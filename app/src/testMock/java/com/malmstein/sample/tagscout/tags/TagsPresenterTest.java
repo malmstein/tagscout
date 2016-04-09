@@ -77,6 +77,7 @@ public class TagsPresenterTest {
         // Then the view shows the proper amount of tags
         ArgumentCaptor<List> showTagsArgumentCaptor = ArgumentCaptor.forClass(List.class);
         verify(tagsView).showTags(showTagsArgumentCaptor.capture());
+        verify(tagsContainerView).showTags(showTagsArgumentCaptor.capture());
         assertTrue(showTagsArgumentCaptor.getValue().size() == 2);
     }
 

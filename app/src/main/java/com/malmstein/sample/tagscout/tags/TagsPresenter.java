@@ -38,6 +38,7 @@ public class TagsPresenter implements TagsContract.Presenter {
             @Override
             public void onSuccess(RetrieveTagsUseCase.ResponseValue response) {
                 tagsView.showTags(response.getTags());
+                tagsContainerView.showTags(response.getTags());
             }
 
             @Override

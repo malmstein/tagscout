@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.malmstein.sample.tagscout.R;
 import com.malmstein.sample.tagscout.data.model.Tag;
 
+import java.util.List;
+
 public class TagFilter extends RelativeLayout {
 
     public static final int DEFAULT_LINE_MARGIN = 8;
@@ -221,6 +223,15 @@ public class TagFilter extends RelativeLayout {
 
     public void removeTag(Tag tag) {
         displayer.removeTag(tag);
+        drawTags();
+    }
+
+    public void showTags(List<Tag> tags) {
+        for (Tag tag : tags) {
+            if (tag.isSelected()){
+                displayer.addTag(tag);
+            }
+        }
         drawTags();
     }
 

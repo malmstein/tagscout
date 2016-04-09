@@ -10,6 +10,8 @@ import com.malmstein.sample.tagscout.data.model.Tag;
 import com.malmstein.sample.tagscout.tags.TagsPresenter;
 import com.malmstein.sample.tagscout.tags.domain.TagsContract;
 
+import java.util.List;
+
 public class TagsContainer extends ScrollView implements TagsContract.ContainerView, TagFilter.Listener {
 
     private TagsPresenter tagsPresenter;
@@ -38,6 +40,11 @@ public class TagsContainer extends ScrollView implements TagsContract.ContainerV
 
     public void setPresenter(TagsPresenter tagsPresenter) {
         this.tagsPresenter = tagsPresenter;
+    }
+
+    @Override
+    public void showTags(List<Tag> tags) {
+        tagFilter.showTags(tags);
     }
 
     @Override

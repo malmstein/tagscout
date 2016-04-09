@@ -138,7 +138,7 @@ public class TagRepositoryTest {
 
         // Then the service API and persistent repository are called and the cache is updated
         verify(tagRemoteDataSource).toggleTagSelection(TAGS.get(0));
-        assertThat(tagRepository.cachedTags.get(TAGS.get(0).getId()).isSelected(), is(true));
+        assertThat(tagRepository.getCachedTag(TAGS.get(0).getId()).isSelected(), is(true));
     }
 
 }

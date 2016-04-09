@@ -17,9 +17,9 @@ public class SelectTagUseCase extends UseCase<SelectTagUseCase.RequestValues, Se
     @Override
     protected void executeUseCase(RequestValues requestValues) {
         Tag selectedTag = requestValues.getSelectedTag();
-        Tag toggleTag = new Tag(selectedTag.getId(), selectedTag.getTag(), selectedTag.getColor(), !selectedTag.isSelected());
-        tagRepository.toggleTagSelection(toggleTag);
-        getUseCaseCallback().onSuccess(new ResponseValue(tagRepository.getCachedTags(), toggleTag));
+        tagRepository.toggleTagSelection(selectedTag);
+        Tag toggledTag = tagRepository.getCachedTag(selectedTag.getId());
+        getUseCaseCallback().onSuccess(new ResponseValue(tagRepository.getCachedTags(), toggledTag));
     }
 
     public static class RequestValues extends UseCase.RequestValues {
