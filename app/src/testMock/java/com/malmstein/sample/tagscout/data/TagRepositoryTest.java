@@ -1,5 +1,6 @@
 package com.malmstein.sample.tagscout.data;
 
+import com.malmstein.sample.tagscout.data.local.LocalTagDataSource;
 import com.malmstein.sample.tagscout.data.model.Tag;
 import com.malmstein.sample.tagscout.tags.domain.TagsContract;
 
@@ -15,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
@@ -28,6 +28,9 @@ public class TagRepositoryTest {
 
     @Mock
     private TagDataSource tagRemoteDataSource;
+
+    @Mock
+    private LocalTagDataSource tagLocalDataSource;
 
     @Mock
     private TagDataSource.LoadTagsCallback loadTagsCallback;
@@ -49,7 +52,7 @@ public class TagRepositoryTest {
         MockitoAnnotations.initMocks(this);
 
         // Get a reference to the class under test
-        tagRepository = TagRepository.getInstance(tagRemoteDataSource);
+        tagRepository = TagRepository.getInstance(tagRemoteDataSource, tagLocalDataSource);
 
         TAGS.clear();
         TAGS.add(new Tag(1, "text1", "color1"));
@@ -62,49 +65,52 @@ public class TagRepositoryTest {
     }
 
     @Test
-    public void getTasks_requestsAllTagsFromRemoteDataSourceWhenCacheIsEmpty() {
-        // Given the cache is empty
-        tagRepository.cleanCache();
+    public void getTags_repositoryCachesAfterFirstApiCall() {
+        // Given a setup Captor to capture callbacks
+        // When two calls are issued to the tags repository
+        twoTagsLoadCallsToRepository(loadTagsCallback);
 
-        // And tags are requested from the tasks repository
-        tagRepository.getTags(loadTagsCallback);
-
-        // Then tags are loaded from the remote data source
+        // Then tasks were only requested once from Service API
         verify(tagRemoteDataSource).getTags(any(TagDataSource.LoadTagsCallback.class));
     }
 
     @Test
-    public void getTasksWithRemoteDataSourceUnavailable_noDataIsAvailable() {
-        // Given the cache is empty
-        tagRepository.cleanCache();
-
-        // When calling getTags in the repository
+    public void getTags_requestsAllTagsFromLocalDataSource() {
+        // When tags are requested from the tasks repository
         tagRepository.getTags(loadTagsCallback);
 
-        // And the remote data source has no data available
-        verify(tagRemoteDataSource).getTags(tagsCallbackArgumentCaptor.capture());
-        tagsCallbackArgumentCaptor.getValue().onDataNotAvailable();
-
-        // Verify no data is returned
-        verify(loadTagsCallback).onDataNotAvailable();
+        // Then tags are loaded from the local data source
+        verify(tagLocalDataSource).getTags(any(TagDataSource.LoadTagsCallback.class));
     }
 
     @Test
-    public void getTasksFromRemoteDataSource_returnsListOfTagsAndSavesInCache() {
-        // Given the cache is empty
-        tagRepository.cleanCache();
-
+    public void getTagsWithLocalDataSourceUnavailable_tagsAreRetrievedFromRemote() {
         // When calling getTags in the repository
         tagRepository.getTags(loadTagsCallback);
 
-        // And the remote data source data is  available
-        verify(tagRemoteDataSource).getTags(tagsCallbackArgumentCaptor.capture());
-        tagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
+        // And the local data source has no data available
+        setTagsNotAvailable(tagLocalDataSource);
 
+        // And the remote data source has data available
+        setTagsAvailable(tagRemoteDataSource, TAGS);
+
+        // Verify the tags from the local data source are returned
         verify(loadTagsCallback).onTagsLoaded(TAGS);
+    }
 
-        // And stored in the cache
-        assertEquals(2, tagRepository.getCachedTags().size());
+    @Test
+    public void getTagsWithBothDataSourcesUnavailable_firesOnDataUnavailable() {
+        // When calling getTasks in the repository
+        tagRepository.getTags(loadTagsCallback);
+
+        // And the local data source has no data available
+        setTagsNotAvailable(tagLocalDataSource);
+
+        // And the remote data source has no data available
+        setTagsNotAvailable(tagRemoteDataSource);
+
+        // Verify no data is returned
+        verify(loadTagsCallback).onDataNotAvailable();
     }
 
     @Test
@@ -121,14 +127,11 @@ public class TagRepositoryTest {
 
     @Test
     public void selectTag_marksTagAsSelectedAndUpdatesCache() {
-        // Given the cache is empty
-        tagRepository.cleanCache();
-
         // When calling getTags in the repository
         tagRepository.getTags(loadTagsCallback);
 
-        verify(tagRemoteDataSource).getTags(tagsCallbackArgumentCaptor.capture());
-        tagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
+        // And the local data source has data available
+        setTagsAvailable(tagLocalDataSource, TAGS);
 
         verify(loadTagsCallback).onTagsLoaded(TAGS);
 
@@ -142,20 +145,49 @@ public class TagRepositoryTest {
 
     @Test
     public void filterTag_returnsFilteredTags() {
-        // Given the cache is empty
-        tagRepository.cleanCache();
-
         // When calling getTags in the repository
         tagRepository.getTags(loadTagsCallback);
 
-        verify(tagRemoteDataSource).getTags(tagsCallbackArgumentCaptor.capture());
-        tagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
+        // And the local data source has data available
+        setTagsAvailable(tagLocalDataSource, TAGS);
 
         verify(loadTagsCallback).onTagsLoaded(TAGS);
 
         // Querying will return a filtered list
         String query = "1";
         assertThat(tagRepository.filterTags(query).size(), is(1));
+    }
+
+    /**
+     * Convenience method that issues two calls to the tasks repository
+     */
+    private void twoTagsLoadCallsToRepository(TagDataSource.LoadTagsCallback callback) {
+        // When tasks are requested from repository
+        tagRepository.getTags(callback); // First call to API
+
+        // Use the Mockito Captor to capture the callback
+        verify(tagLocalDataSource).getTags(tagsCallbackArgumentCaptor.capture());
+
+        // Local data source doesn't have data yet
+        tagsCallbackArgumentCaptor.getValue().onDataNotAvailable();
+
+        // Verify the remote data source is queried
+        verify(tagRemoteDataSource).getTags(tagsCallbackArgumentCaptor.capture());
+
+        // Trigger callback so tasks are cached
+        tagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
+
+        tagRepository.getTags(callback); // Second call to API
+    }
+
+    private void setTagsNotAvailable(TagDataSource dataSource) {
+        verify(dataSource).getTags(tagsCallbackArgumentCaptor.capture());
+        tagsCallbackArgumentCaptor.getValue().onDataNotAvailable();
+    }
+
+    private void setTagsAvailable(TagDataSource dataSource, List<Tag> tags) {
+        verify(dataSource).getTags(tagsCallbackArgumentCaptor.capture());
+        tagsCallbackArgumentCaptor.getValue().onTagsLoaded(tags);
     }
 
 }

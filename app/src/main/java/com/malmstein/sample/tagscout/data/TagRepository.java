@@ -3,6 +3,7 @@ package com.malmstein.sample.tagscout.data;
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
+import com.malmstein.sample.tagscout.data.local.LocalTagDataSource;
 import com.malmstein.sample.tagscout.data.model.Tag;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class TagRepository implements TagDataSource {
     private static TagRepository INSTANCE = null;
 
     private final TagDataSource tagRemoteSource;
+    private final LocalTagDataSource tagLocalSource;
 
     private Map<Integer, Tag> cachedTags;
 
@@ -29,16 +31,17 @@ public class TagRepository implements TagDataSource {
      * @param tagRemoteDataSource the backend data source
      * @return the {@link TagRepository} instance
      */
-    public static TagRepository getInstance(TagDataSource tagRemoteDataSource) {
+    public static TagRepository getInstance(TagDataSource tagRemoteDataSource, LocalTagDataSource tagLocalDataSource) {
         if (INSTANCE == null) {
-            INSTANCE = new TagRepository(tagRemoteDataSource);
+            INSTANCE = new TagRepository(tagRemoteDataSource, tagLocalDataSource);
         }
         return INSTANCE;
     }
 
     // Prevent direct instantiation.
-    private TagRepository(@NonNull TagDataSource tagRemoteDataSource) {
+    private TagRepository(@NonNull TagDataSource tagRemoteDataSource, @NonNull LocalTagDataSource tagLocalDataSource) {
         tagRemoteSource = tagRemoteDataSource;
+        tagLocalSource = tagLocalDataSource;
     }
 
     /**
@@ -53,18 +56,35 @@ public class TagRepository implements TagDataSource {
         if (cachedTags != null && cachedTags.size() > 0) {
             callback.onTagsLoaded(tags);
         } else {
-            tagRemoteSource.getTags(new LoadTagsCallback() {
+            tagLocalSource.getTags(new LoadTagsCallback() {
                 @Override
                 public void onTagsLoaded(List<Tag> tags) {
-                    processLoadedTags(tags, callback);
+                    refreshCache(tags);
+                    callback.onTagsLoaded(new ArrayList<>(cachedTags.values()));
                 }
 
                 @Override
                 public void onDataNotAvailable() {
-                    callback.onDataNotAvailable();
+                    getTagsFromRemoteDataSource(callback);
                 }
             });
         }
+    }
+
+    private void getTagsFromRemoteDataSource(@NonNull final TagDataSource.LoadTagsCallback callback) {
+        tagRemoteSource.getTags(new TagDataSource.LoadTagsCallback() {
+            @Override
+            public void onTagsLoaded(List<Tag> tags) {
+                refreshCache(tags);
+                refreshLocalDataSource(tags);
+                callback.onTagsLoaded(new ArrayList<>(cachedTags.values()));
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                callback.onDataNotAvailable();
+            }
+        });
     }
 
     @Override
@@ -97,6 +117,7 @@ public class TagRepository implements TagDataSource {
     @Override
     public void toggleTagSelection(Tag tag) {
         tagRemoteSource.toggleTagSelection(tag);
+        tagLocalSource.toggleTagSelection(tag);
 
         Tag toggleTag = new Tag(tag.getId(), tag.getTag(), tag.getColor(), !tag.isSelected());
         if (cachedTags == null) {
@@ -105,16 +126,20 @@ public class TagRepository implements TagDataSource {
         cachedTags.put(tag.getId(), toggleTag);
     }
 
-    private void processLoadedTags(List<Tag> tags, final LoadTagsCallback callback) {
+    private void refreshCache(List<Tag> tags) {
         cleanCache();
         for (Tag tag : tags) {
             cachedTags.put(tag.getId(), tag);
         }
-        callback.onTagsLoaded(new ArrayList<>(cachedTags.values()));
+    }
+
+    private void refreshLocalDataSource(List<Tag> tags) {
+        tagLocalSource.deleteAllTags();
+        tagLocalSource.saveTags(tags);
     }
 
     public List<Tag> getCachedTags() {
-        if (savedFilter != null){
+        if (savedFilter != null) {
             return filterTags(savedFilter);
         } else {
             return cachedTags == null ? null : new ArrayList<>(cachedTags.values());
@@ -134,7 +159,7 @@ public class TagRepository implements TagDataSource {
     }
 
     /**
-     * Used to force {@link #getInstance(TagDataSource)} to create a new instance
+     * Used to force {@link #(TagDataSource)} to create a new instance
      * next time it's called.
      */
     public static void destroyInstance() {

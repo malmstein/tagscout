@@ -1,7 +1,8 @@
-package com.malmstein.sample.tagscout.data;
+package com.malmstein.sample.tagscout.data.remote;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.malmstein.sample.tagscout.data.TagDataSource;
 import com.malmstein.sample.tagscout.data.model.Tag;
 
 import java.io.IOException;
