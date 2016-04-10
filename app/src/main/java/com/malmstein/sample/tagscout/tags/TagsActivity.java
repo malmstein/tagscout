@@ -25,9 +25,9 @@ public class TagsActivity extends AppCompatActivity {
 
         tagsPresenter = new TagsPresenter(
                 Injection.provideUseCaseHandler(),
-                Injection.provideRetrieveTagsUseCase(),
-                Injection.provideSelectTagUseCase(),
-                Injection.provideFilterTagsUseCase(),
+                Injection.provideRetrieveTagsUseCase(this),
+                Injection.provideSelectTagUseCase(this),
+                Injection.provideFilterTagsUseCase(this),
                 tagsView,
                 tagsContainerView
         );

@@ -1,5 +1,7 @@
 package com.malmstein.sample.tagscout.tags;
 
+import android.content.Context;
+
 import com.malmstein.sample.tagscout.data.TagDataSource;
 import com.malmstein.sample.tagscout.data.TagRepository;
 import com.malmstein.sample.tagscout.data.domain.TestUseCaseScheduler;
@@ -30,6 +32,9 @@ public class TagsPresenterTest {
     private TagRepository tagRepository;
 
     @Mock
+    private Context mockContext;
+
+    @Mock
     private TagsContract.View tagsView;
 
     @Mock
@@ -57,8 +62,8 @@ public class TagsPresenterTest {
         RetrieveTagsUseCase retrieveTagsUseCase = new RetrieveTagsUseCase(tagRepository);
 
         tagsPresenter = new TagsPresenter(useCaseHandler, retrieveTagsUseCase,
-                                          Injection.provideSelectTagUseCase(),
-                                          Injection.provideFilterTagsUseCase(),
+                                          Injection.provideSelectTagUseCase(mockContext),
+                                          Injection.provideFilterTagsUseCase(mockContext),
                                           tagsView,
                                           tagsContainerView
         );

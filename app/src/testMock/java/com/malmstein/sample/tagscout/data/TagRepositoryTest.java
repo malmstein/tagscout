@@ -30,6 +30,9 @@ public class TagRepositoryTest {
     private TagDataSource tagRemoteDataSource;
 
     @Mock
+    private TagDataSource tagLocalDataSource;
+
+    @Mock
     private TagDataSource.LoadTagsCallback loadTagsCallback;
 
     @Mock
@@ -49,7 +52,7 @@ public class TagRepositoryTest {
         MockitoAnnotations.initMocks(this);
 
         // Get a reference to the class under test
-        tagRepository = TagRepository.getInstance(tagRemoteDataSource);
+        tagRepository = TagRepository.getInstance(tagRemoteDataSource, tagLocalDataSource);
 
         TAGS.clear();
         TAGS.add(new Tag(1, "text1", "color1"));
