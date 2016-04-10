@@ -10,6 +10,8 @@ public class TagsContract {
 
         void loadTags();
 
+        void removeFilteredTag(String query, Tag tag);
+
         void toggleTagState(Tag tag);
 
         void filter(String query);

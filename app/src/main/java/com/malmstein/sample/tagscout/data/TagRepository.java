@@ -18,10 +18,10 @@ public class TagRepository implements TagDataSource {
     private static TagRepository INSTANCE = null;
 
     private final TagDataSource tagRemoteSource;
-    /**
-     * This variable has package local visibility so it can be accessed from tests.
-     */
-    Map<Integer, Tag> cachedTags;
+
+    private Map<Integer, Tag> cachedTags;
+
+    private String savedFilter;
 
     /**
      * Returns the single instance of this class, creating it if necessary.
@@ -69,12 +69,13 @@ public class TagRepository implements TagDataSource {
 
     @Override
     public void filterTags(String query, final LoadTagsCallback callback) {
+        savedFilter = query;
         List<Tag> filteredTags = filterTags(query);
         callback.onTagsLoaded(filteredTags);
     }
 
     protected List<Tag> filterTags(String query) {
-        List<Tag> tags = getCachedTags();
+        List<Tag> tags = new ArrayList<>(cachedTags.values());
         ArrayList<Tag> filteredTags = new ArrayList<>();
         for (Tag tag : tags) {
             if (tag.getTag().toUpperCase().contains(query.toUpperCase())) {
@@ -113,7 +114,11 @@ public class TagRepository implements TagDataSource {
     }
 
     public List<Tag> getCachedTags() {
-        return cachedTags == null ? null : new ArrayList<>(cachedTags.values());
+        if (savedFilter != null){
+            return filterTags(savedFilter);
+        } else {
+            return cachedTags == null ? null : new ArrayList<>(cachedTags.values());
+        }
     }
 
     public Tag getCachedTag(int id) {

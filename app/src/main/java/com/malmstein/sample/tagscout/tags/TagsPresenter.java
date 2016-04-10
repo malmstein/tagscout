@@ -48,6 +48,11 @@ public class TagsPresenter implements TagsContract.Presenter {
     }
 
     @Override
+    public void removeFilteredTag(String query, Tag tag) {
+
+    }
+
+    @Override
     public void toggleTagState(final Tag tag) {
         useCaseHandler.execute(selectTagUseCase, new SelectTagUseCase.RequestValues(tag), new UseCase.UseCaseCallback<SelectTagUseCase.ResponseValue>() {
             @Override
