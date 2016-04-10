@@ -2,10 +2,14 @@
 
 ### Summary
 
-This sample add a domain layer between the presenter layer and repositories. This split the app in three layers:
+TagScout can be run using two different flavours. The reason for that is to create an environment where the unit, integration and, most importantly, instrumentation tests, can be run much faster.  Also, it makes the application usable should the remote API service be down.
 
-* **MVP**: Model View Presenter pattern 
-* **Domain**: Holding all business logic. The domain layer starts with some classes named use cases or interactors and used by the application presenters. These use cases represent all the possible actions a developer can perform with the domain layer. The execution of this Use Cases are in a background thread using the [command pattern](http://www.oodesign.com/command-pattern.html). All the domain layer is completely decoupled from the Android SDK or another third party libraries.
-* **Repository**: Repository pattern   
+Once the repository is cloned, these are the CLI needed in order to build and run both flavours:
 
-### Key concepts
+`$./gradleW assembleMock` - Generates the APK for the mock flavour
+`$./gradleW assembleProd` - Generates the APK for the production flavour
+
+Run the tests
+
+`$./gradleW clean build` - Builds all the flavours and runs the unit tests
+`$./gradleW connectedMockDebugAndroidTest` - Runs the instrumentation tests (using Espresso)
