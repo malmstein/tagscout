@@ -1,11 +1,14 @@
 package com.malmstein.sample.tagscout.injection;
 
-import com.malmstein.sample.tagscout.data.RemoteTagDataSource;
+import android.content.Context;
+
 import com.malmstein.sample.tagscout.data.TagRepository;
+import com.malmstein.sample.tagscout.data.local.LocalTagDataSource;
+import com.malmstein.sample.tagscout.data.remote.RemoteTagDataSource;
 import com.malmstein.sample.tagscout.domain.UseCaseHandler;
+import com.malmstein.sample.tagscout.tags.domain.FilterTagsUseCase;
 import com.malmstein.sample.tagscout.tags.domain.RetrieveTagsUseCase;
 import com.malmstein.sample.tagscout.tags.domain.SelectTagUseCase;
-import com.malmstein.sample.tagscout.tags.domain.FilterTagsUseCase;
 
 /**
  * Enables injection of mock implementations for
@@ -14,23 +17,26 @@ import com.malmstein.sample.tagscout.tags.domain.FilterTagsUseCase;
  */
 public class Injection {
 
-    public static TagRepository provideTagRepository() {
-        return TagRepository.getInstance(RemoteTagDataSource.getInstance());
+    private static TagRepository provideTagRepository(Context context) {
+        return TagRepository.getInstance(
+                RemoteTagDataSource.getInstance(),
+                LocalTagDataSource.getInstance(context)
+        );
     }
 
     public static UseCaseHandler provideUseCaseHandler() {
         return UseCaseHandler.getInstance();
     }
 
-    public static RetrieveTagsUseCase provideRetrieveTagsUseCase() {
-        return new RetrieveTagsUseCase(Injection.provideTagRepository());
+    public static RetrieveTagsUseCase provideRetrieveTagsUseCase(Context context) {
+        return new RetrieveTagsUseCase(provideTagRepository(context));
     }
 
-    public static SelectTagUseCase provideSelectTagUseCase() {
-        return new SelectTagUseCase(Injection.provideTagRepository());
+    public static SelectTagUseCase provideSelectTagUseCase(Context context) {
+        return new SelectTagUseCase(provideTagRepository(context));
     }
 
-    public static FilterTagsUseCase provideFilterTagsUseCase() {
-        return new FilterTagsUseCase(Injection.provideTagRepository());
+    public static FilterTagsUseCase provideFilterTagsUseCase(Context context) {
+        return new FilterTagsUseCase(provideTagRepository(context));
     }
 }

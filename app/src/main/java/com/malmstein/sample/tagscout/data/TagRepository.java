@@ -18,6 +18,7 @@ public class TagRepository implements TagDataSource {
     private static TagRepository INSTANCE = null;
 
     private final TagDataSource tagRemoteSource;
+    private final TagDataSource tagLocalSource;
 
     private Map<Integer, Tag> cachedTags;
 
@@ -29,16 +30,17 @@ public class TagRepository implements TagDataSource {
      * @param tagRemoteDataSource the backend data source
      * @return the {@link TagRepository} instance
      */
-    public static TagRepository getInstance(TagDataSource tagRemoteDataSource) {
+    public static TagRepository getInstance(TagDataSource tagRemoteDataSource, TagDataSource tagLocalDataSource) {
         if (INSTANCE == null) {
-            INSTANCE = new TagRepository(tagRemoteDataSource);
+            INSTANCE = new TagRepository(tagRemoteDataSource, tagLocalDataSource);
         }
         return INSTANCE;
     }
 
     // Prevent direct instantiation.
-    private TagRepository(@NonNull TagDataSource tagRemoteDataSource) {
+    private TagRepository(@NonNull TagDataSource tagRemoteDataSource, @NonNull TagDataSource tagLocalDataSource) {
         tagRemoteSource = tagRemoteDataSource;
+        tagLocalSource = tagLocalDataSource;
     }
 
     /**
