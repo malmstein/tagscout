@@ -146,7 +146,7 @@ public class TagFilterView extends RelativeLayout {
         TextView deletableView = (TextView) tagLayout.findViewById(R.id.tag_delete);
 
         float tagTextWidth = tagText.getPaint().measureText(tagText.getText().toString()) + defaultPadding + offset;
-        float tagCrossWidth = deletableView.getPaint().measureText("X") + defaultPadding + defaultPadding;
+        float tagCrossWidth = deletableView.getPaint().measureText(deletableView.getText().toString()) + defaultPadding + defaultPadding;
         float tagWidth = tagTextWidth + tagCrossWidth;
 
         return tagWidth;
@@ -160,7 +160,6 @@ public class TagFilterView extends RelativeLayout {
         TextView tagView = (TextView) tagLayout.findViewById(R.id.tag_label);
         tagView.setText(tag.getTag());
 
-        TextView deletableView = (TextView) tagLayout.findViewById(R.id.tag_delete);
         tagLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
