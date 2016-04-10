@@ -116,7 +116,7 @@ public class TagRepositoryTest {
         verify(tagRemoteDataSource).deleteAllTags();
 
         // And the cache is now empty
-        assertThat(tagRepository.cachedTags.size(), is(0));
+        assertThat(tagRepository.getCachedTags().size(), is(0));
     }
 
     @Test

@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 
 public class TagsPresenterTest {
@@ -57,7 +58,9 @@ public class TagsPresenterTest {
         RetrieveTagsUseCase retrieveTagsUseCase = new RetrieveTagsUseCase(tagRepository);
 
         tagsPresenter = new TagsPresenter(useCaseHandler, retrieveTagsUseCase,
-                                          Injection.provideSelectTagUseCase(), tagsView,
+                                          Injection.provideSelectTagUseCase(),
+                                          Injection.provideFilterTagsUseCase(),
+                                          tagsView,
                                           tagsContainerView
         );
     }
@@ -95,19 +98,6 @@ public class TagsPresenterTest {
 
         // Then the view shows the proper amount of tags
         verify(tagsView).showLoadingTagsError();
-    }
-
-    @Test
-    public void filtersListWhenEditTextSearched(){
-        String query = "aw";
-        tagsPresenter.filter(query);
-
-        // And there is some data
-        verify(tagRepository).getTags(loadTagsCallbackArgumentCaptor.capture());
-        loadTagsCallbackArgumentCaptor.getValue().onTagsLoaded(TAGS);
-
-        // Then the view shows the proper amount of tags
-        verify(tagsView).filter(query);
     }
 
 }

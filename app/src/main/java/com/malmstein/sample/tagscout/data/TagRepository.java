@@ -75,7 +75,7 @@ public class TagRepository implements TagDataSource {
     }
 
     protected List<Tag> filterTags(String query) {
-        List<Tag> tags = new ArrayList<>(cachedTags.values());
+        List<Tag> tags = cachedTags == null ? new ArrayList<Tag>() : new ArrayList<>(cachedTags.values());
         ArrayList<Tag> filteredTags = new ArrayList<>();
         for (Tag tag : tags) {
             if (tag.getTag().toUpperCase().contains(query.toUpperCase())) {
