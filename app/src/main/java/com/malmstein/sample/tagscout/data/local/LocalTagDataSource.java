@@ -19,9 +19,11 @@ package com.malmstein.sample.tagscout.data.local;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.support.annotation.NonNull;
 
 import com.malmstein.sample.tagscout.data.TagDataSource;
+import com.malmstein.sample.tagscout.data.local.TagPersistenceContract.TagEntry;
 import com.malmstein.sample.tagscout.data.model.Tag;
 
 import java.util.ArrayList;
@@ -58,21 +60,21 @@ public class LocalTagDataSource implements TagDataSource {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String[] projection = {
-                TagPersistenceContract.TagEntry.COLUMN_NAME_ENTRY_ID,
-                TagPersistenceContract.TagEntry.COLUMN_NAME_TAG,
-                TagPersistenceContract.TagEntry.COLUMN_NAME_COLOR,
-                TagPersistenceContract.TagEntry.COLUMN_NAME_SELECTED
+                TagEntry.COLUMN_NAME_ENTRY_ID,
+                TagEntry.COLUMN_NAME_TAG,
+                TagEntry.COLUMN_NAME_COLOR,
+                TagEntry.COLUMN_NAME_SELECTED
         };
 
         Cursor c = db.query(
-                TagPersistenceContract.TagEntry.TABLE_NAME, projection, null, null, null, null, null);
+                TagEntry.TABLE_NAME, projection, null, null, null, null, null);
 
         if (c != null && c.getCount() > 0) {
             while (c.moveToNext()) {
-                int itemId = c.getInt(c.getColumnIndexOrThrow(TagPersistenceContract.TagEntry.COLUMN_NAME_ENTRY_ID));
-                String tagText = c.getString(c.getColumnIndexOrThrow(TagPersistenceContract.TagEntry.COLUMN_NAME_TAG));
-                String color = c.getString(c.getColumnIndexOrThrow(TagPersistenceContract.TagEntry.COLUMN_NAME_COLOR));
-                boolean selected = c.getInt(c.getColumnIndexOrThrow(TagPersistenceContract.TagEntry.COLUMN_NAME_SELECTED)) == 1;
+                int itemId = c.getInt(c.getColumnIndexOrThrow(TagEntry.COLUMN_NAME_ENTRY_ID));
+                String tagText = c.getString(c.getColumnIndexOrThrow(TagEntry.COLUMN_NAME_TAG));
+                String color = c.getString(c.getColumnIndexOrThrow(TagEntry.COLUMN_NAME_COLOR));
+                boolean selected = c.getInt(c.getColumnIndexOrThrow(TagEntry.COLUMN_NAME_SELECTED)) == 1;
                 Tag tag = new Tag(itemId, tagText, color, selected);
                 tags.add(tag);
             }
@@ -99,13 +101,37 @@ public class LocalTagDataSource implements TagDataSource {
     @Override
     public void deleteAllTags() {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete(TagPersistenceContract.TagEntry.TABLE_NAME, null, null);
+        db.delete(TagEntry.TABLE_NAME, null, null);
         db.close();
     }
 
     @Override
     public void toggleTagSelection(Tag tag) {
 
+    }
+
+    public void saveTags(List<Tag> tags) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.beginTransaction();
+        String sql = "INSERT INTO " + TagEntry.TABLE_NAME + "(" + TagEntry.COLUMN_NAME_ENTRY_ID + "," + TagEntry.COLUMN_NAME_TAG + "," + TagEntry.COLUMN_NAME_COLOR + "," + TagEntry.COLUMN_NAME_SELECTED + ")" + " VALUES(?,?,?,?)";
+        SQLiteStatement insert = db.compileStatement(sql);
+
+        try {
+            for (Tag tag : tags) {
+                insert.bindLong(1, tag.getId());
+                insert.bindString(2, tag.getTag());
+                insert.bindString(3, tag.getColor());
+                insert.bindLong(4, tag.isSelected() ? 1 : 0);
+                insert.execute();
+                insert.clearBindings();
+            }
+        } finally {
+            db.endTransaction();
+        }
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
     }
 
 }

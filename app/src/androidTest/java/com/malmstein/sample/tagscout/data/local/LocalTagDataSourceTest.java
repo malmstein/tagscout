@@ -1,14 +1,23 @@
 package com.malmstein.sample.tagscout.data.local;
 
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
-import com.malmstein.sample.tagscout.data.local.LocalTagDataSource;
-import com.malmstein.sample.tagscout.data.local.TagDbHelper;
+import com.malmstein.sample.tagscout.data.TagDataSource;
+import com.malmstein.sample.tagscout.data.model.Tag;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * Integration test for the {@link com.malmstein.sample.tagscout.data.TagDataSource}, which uses the {@link TagDbHelper}.
@@ -17,7 +26,7 @@ import org.junit.runner.RunWith;
 @LargeTest
 public class LocalTagDataSourceTest {
 
-    private TasksLocalDataSource localDataSource;
+    private LocalTagDataSource localDataSource;
 
     @Before
     public void setUp() {
@@ -31,7 +40,26 @@ public class LocalTagDataSourceTest {
     }
 
     @Test
-    public void saveTask_retrievesTask() {
+    public void saveTags_retrievesTags() {
+        // Given two tags
+        List<Tag> tags = new ArrayList<>();
+        tags.add(new Tag(1, "text1", "color1", true));
+        tags.add(new Tag(2, "text2", "color2", false));
 
+        // When saved into the persistent repository
+        localDataSource.saveTags(tags);
+
+        // Then the tags can be retrieved from the persistent repository
+        localDataSource.getTags(new TagDataSource.LoadTagsCallback() {
+            @Override
+            public void onTagsLoaded(List<Tag> tags) {
+                assertThat(tags.size(), is(2));
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                fail("Callback error");
+            }
+        });
     }
 }
