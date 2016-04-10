@@ -16,6 +16,7 @@
 
 package com.malmstein.sample.tagscout.data.local;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -107,7 +108,16 @@ public class LocalTagDataSource implements TagDataSource {
 
     @Override
     public void toggleTagSelection(Tag tag) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        ContentValues values = new ContentValues();
+        values.put(TagEntry.COLUMN_NAME_SELECTED, true);
+
+        String selection = TagEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(tag.getId())};
+
+        db.update(TagEntry.TABLE_NAME, values, selection, selectionArgs);
+        db.close();
     }
 
     public void saveTags(List<Tag> tags) {

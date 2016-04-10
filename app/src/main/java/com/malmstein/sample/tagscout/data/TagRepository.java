@@ -117,6 +117,7 @@ public class TagRepository implements TagDataSource {
     @Override
     public void toggleTagSelection(Tag tag) {
         tagRemoteSource.toggleTagSelection(tag);
+        tagLocalSource.toggleTagSelection(tag);
 
         Tag toggleTag = new Tag(tag.getId(), tag.getTag(), tag.getColor(), !tag.isSelected());
         if (cachedTags == null) {

@@ -11,6 +11,7 @@
     android:theme="@style/TagScout">
 
     <activity android:name="com.malmstein.sample.tagscout.tags.TagsActivity"
+      android:windowSoftInputMode="stateHidden"
       android:label="@string/title_add_tags">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
