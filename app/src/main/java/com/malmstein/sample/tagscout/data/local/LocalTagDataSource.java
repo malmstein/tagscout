@@ -113,22 +113,20 @@ public class LocalTagDataSource implements TagDataSource {
     public void saveTags(List<Tag> tags) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        db.beginTransaction();
         String sql = "INSERT INTO " + TagEntry.TABLE_NAME + "(" + TagEntry.COLUMN_NAME_ENTRY_ID + "," + TagEntry.COLUMN_NAME_TAG + "," + TagEntry.COLUMN_NAME_COLOR + "," + TagEntry.COLUMN_NAME_SELECTED + ")" + " VALUES(?,?,?,?)";
         SQLiteStatement insert = db.compileStatement(sql);
 
-        try {
-            for (Tag tag : tags) {
-                insert.bindLong(1, tag.getId());
-                insert.bindString(2, tag.getTag());
-                insert.bindString(3, tag.getColor());
-                insert.bindLong(4, tag.isSelected() ? 1 : 0);
-                insert.execute();
-                insert.clearBindings();
-            }
-        } finally {
-            db.endTransaction();
+        db.beginTransaction();
+
+        for (Tag tag : tags) {
+            insert.bindLong(1, tag.getId());
+            insert.bindString(2, tag.getTag());
+            insert.bindString(3, tag.getColor());
+            insert.bindLong(4, tag.isSelected() ? 1 : 0);
+            insert.execute();
+            insert.clearBindings();
         }
+
         db.setTransactionSuccessful();
         db.endTransaction();
         db.close();
