@@ -53,7 +53,7 @@ public class TagsAdapter extends BaseAdapter {
         ViewHolder holder;
 
         if (rowView == null) {
-            rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_tag, parent, false);
+            rowView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_tag, parent, false);
             holder = new ViewHolder(rowView);
             rowView.setTag(holder);
         } else {

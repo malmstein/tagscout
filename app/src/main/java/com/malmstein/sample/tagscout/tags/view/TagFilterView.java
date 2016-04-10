@@ -161,7 +161,7 @@ public class TagFilterView extends RelativeLayout {
         tagView.setText(tag.getTag());
 
         TextView deletableView = (TextView) tagLayout.findViewById(R.id.tag_delete);
-        deletableView.setOnClickListener(new View.OnClickListener() {
+        tagLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (deleteTagListener != null) {

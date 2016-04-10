@@ -111,7 +111,7 @@ public class LocalTagDataSource implements TagDataSource {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(TagEntry.COLUMN_NAME_SELECTED, true);
+        values.put(TagEntry.COLUMN_NAME_SELECTED, !tag.isSelected());
 
         String selection = TagEntry.COLUMN_NAME_ENTRY_ID + " LIKE ?";
         String[] selectionArgs = {String.valueOf(tag.getId())};
