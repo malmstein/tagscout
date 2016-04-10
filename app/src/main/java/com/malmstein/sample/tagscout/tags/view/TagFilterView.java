@@ -19,7 +19,7 @@ import com.malmstein.sample.tagscout.data.model.Tag;
 
 import java.util.List;
 
-public class TagFilter extends RelativeLayout {
+public class TagFilterView extends RelativeLayout {
 
     public static final int DEFAULT_LINE_MARGIN = 8;
     public static final int DEFAULT_TAG_MARGIN = 8;
@@ -40,17 +40,17 @@ public class TagFilter extends RelativeLayout {
 
     private boolean initialized = false;
 
-    public TagFilter(Context context) {
+    public TagFilterView(Context context) {
         super(context, null);
         init(context);
     }
 
-    public TagFilter(Context context, AttributeSet attrs) {
+    public TagFilterView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public TagFilter(Context context, AttributeSet attrs, int defStyle) {
+    public TagFilterView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }

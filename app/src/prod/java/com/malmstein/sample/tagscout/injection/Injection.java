@@ -5,6 +5,7 @@ import com.malmstein.sample.tagscout.data.TagRepository;
 import com.malmstein.sample.tagscout.domain.UseCaseHandler;
 import com.malmstein.sample.tagscout.tags.domain.RetrieveTagsUseCase;
 import com.malmstein.sample.tagscout.tags.domain.SelectTagUseCase;
+import com.malmstein.sample.tagscout.tags.domain.FilterTagsUseCase;
 
 /**
  * Enables injection of mock implementations for
@@ -29,4 +30,7 @@ public class Injection {
         return new SelectTagUseCase(Injection.provideTagRepository());
     }
 
+    public static FilterTagsUseCase provideFilterTagsUseCase() {
+        return new FilterTagsUseCase(Injection.provideTagRepository());
+    }
 }

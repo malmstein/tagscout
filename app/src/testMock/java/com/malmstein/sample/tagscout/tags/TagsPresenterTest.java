@@ -57,7 +57,9 @@ public class TagsPresenterTest {
         RetrieveTagsUseCase retrieveTagsUseCase = new RetrieveTagsUseCase(tagRepository);
 
         tagsPresenter = new TagsPresenter(useCaseHandler, retrieveTagsUseCase,
-                                          Injection.provideSelectTagUseCase(), tagsView,
+                                          Injection.provideSelectTagUseCase(),
+                                          Injection.provideFilterTagsUseCase(),
+                                          tagsView,
                                           tagsContainerView
         );
     }

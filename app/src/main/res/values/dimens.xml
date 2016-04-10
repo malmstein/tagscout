@@ -4,6 +4,8 @@
 
   <dimen name="tag_container_height">200dp</dimen>
 
+  <dimen name="tag_search_view_padding">8dp</dimen>
+
   <dimen name="filtered_tag_textSize">14sp</dimen>
   <dimen name="filtered_tag_view_padding">10dp</dimen>
   <dimen name="filtered_tag_icon_cross_padding">5dp</dimen>

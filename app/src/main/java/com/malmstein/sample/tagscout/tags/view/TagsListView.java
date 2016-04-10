@@ -16,10 +16,9 @@ import com.malmstein.sample.tagscout.tags.domain.TagsContract;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TagsListView extends FrameLayout implements TagsContract.View{
+public class TagsListView extends FrameLayout implements TagsContract.View {
 
     private TagsPresenter tagsPresenter;
-
     private TagsAdapter tagsAdapter;
     private ListView tagsList;
 
@@ -57,8 +56,8 @@ public class TagsListView extends FrameLayout implements TagsContract.View{
         Snackbar.make(this, "Couldn't load tags", Snackbar.LENGTH_LONG).show();
     }
 
-    private void setAdapter(){
-        if (tagsAdapter == null){
+    private void setAdapter() {
+        if (tagsAdapter == null) {
             tagsAdapter = new TagsAdapter(new ArrayList<Tag>(), tagItemListener);
             tagsList.setAdapter(tagsAdapter);
         }
@@ -70,6 +69,5 @@ public class TagsListView extends FrameLayout implements TagsContract.View{
             tagsPresenter.toggleTagState(selectedTag);
         }
     };
-
 
 }

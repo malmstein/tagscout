@@ -15,6 +15,7 @@ import java.util.List;
 public class TagsAdapter extends BaseAdapter {
 
     private List<Tag> tags;
+
     private TagItemListener tagItemListener;
 
     public TagsAdapter(List<Tag> tags, TagItemListener itemListener) {

@@ -11,6 +11,8 @@ public class TagsContract {
         void loadTags();
 
         void toggleTagState(Tag tag);
+
+        void filter(String query);
     }
 
     public interface View {
