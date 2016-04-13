@@ -4,6 +4,7 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -17,9 +18,10 @@ import java.util.List;
 
 public class TagsContainerView extends ScrollView implements TagsContract.ContainerView, TagFilterView.Listener {
 
+    public static int MAX_HEIGHT_VALUE = 600;
+
     private TagsPresenter tagsPresenter;
     private TagFilterView tagFilter;
-    private EditText tagSearchView;
 
     public TagsContainerView(Context context) {
         super(context);
@@ -34,6 +36,23 @@ public class TagsContainerView extends ScrollView implements TagsContract.Contai
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        try {
+            setScrollBarFadeDuration(0);
+            int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+            if (heightSize > MAX_HEIGHT_VALUE) {
+                heightSize = MAX_HEIGHT_VALUE;
+            }
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.AT_MOST);
+            getLayoutParams().height = heightSize;
+        } catch (Exception e) {
+            Log.e(getClass().getName().toString(), "onMesure: Error forcing height ");
+        } finally {
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        }
+    }
+
+    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         LayoutInflater.from(getContext()).inflate(R.layout.view_tag_container, this, true);
@@ -41,7 +60,7 @@ public class TagsContainerView extends ScrollView implements TagsContract.Contai
         tagFilter = (TagFilterView) findViewById(R.id.tag_filter);
         tagFilter.setOnTagDeleteListener(this);
 
-        tagSearchView = (EditText) findViewById(R.id.tag_search_view);
+        EditText tagSearchView = (EditText) findViewById(R.id.tag_search_view);
         tagSearchView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

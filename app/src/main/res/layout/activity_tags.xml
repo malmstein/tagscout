@@ -10,7 +10,7 @@
     android:id="@+id/tags_container"
     android:layout_width="match_parent"
     android:background="@color/tags_container"
-    android:layout_height="@dimen/tag_container_height" />
+    android:layout_height="wrap_content" />
 
   <com.malmstein.sample.tagscout.tags.view.TagsListView
     android:id="@+id/tags_view"

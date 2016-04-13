@@ -1,5 +1,5 @@
 <resources>
 
-  <dimen name="tag_container_height">140dp</dimen>
+  <dimen name="tag_container_max_height">140dp</dimen>
 
 </resources>
