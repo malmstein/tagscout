@@ -8,7 +8,7 @@
   <EditText
     android:id="@+id/tag_search_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/tag_search_view_height"
     android:singleLine="true"
     android:drawableLeft="@drawable/ic_icon_search"
     android:drawablePadding="@dimen/tag_search_view_padding"

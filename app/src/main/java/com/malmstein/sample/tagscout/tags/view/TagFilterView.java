@@ -23,7 +23,7 @@ public class TagFilterView extends RelativeLayout {
 
     public static final int DEFAULT_LINE_MARGIN = 8;
     public static final int DEFAULT_TAG_MARGIN = 8;
-    public static final float DEFAULT_INNER_PADDING = 10;
+    public static final float DEFAULT_INNER_PADDING = 8;
     public static final float LAYOUT_WIDTH_OFFSET = 2;
     public static final float DEFAULT_TAG_RADIUS = 10;
 
