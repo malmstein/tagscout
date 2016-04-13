@@ -65,6 +65,13 @@ public class TagFilterViewDisplayerTest {
     }
 
     @Test
+    public void addsTagToNewRowWhenExactlyFitsSpace() {
+        displayer.setWidth(1000);
+        displayer.setSpaceUsed(800);
+        assertFalse(displayer.fitsInSameRow(200));
+    }
+
+    @Test
     public void tagsAreOrderedAlphabeticallyAfterAdding(){
         Tag awns = new Tag(1, "awns", "color1", true);
         displayer.addTag(awns);

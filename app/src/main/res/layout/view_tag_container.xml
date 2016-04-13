@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
-  android:layout_height="@dimen/tag_container_height"
+  android:layout_height="wrap_content"
   android:orientation="vertical"
-  android:padding="@dimen/activity_margin">
+  android:padding="@dimen/tag_container_padding">
 
   <EditText
     android:id="@+id/tag_search_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/tag_search_view_height"
     android:singleLine="true"
     android:drawableLeft="@drawable/ic_icon_search"
     android:drawablePadding="@dimen/tag_search_view_padding"
     android:hint="@string/tag_search_hint" />
 
-  <ScrollView
+  <com.malmstein.sample.tagscout.tags.view.TagFilterView
+    android:id="@+id/tag_filter"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginTop="@dimen/activity_margin">
-
-    <com.malmstein.sample.tagscout.tags.view.TagFilterView
-      android:id="@+id/tag_filter"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
-
-  </ScrollView>
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/tag_search_view_padding"/>
 
 </LinearLayout>
 

@@ -1,29 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/tag_layout"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/tag_label"
   android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:orientation="horizontal"
-  android:padding="@dimen/filtered_tag_view_padding">
+  android:layout_height="@dimen/filtered_tag_height"
+  android:gravity="center_vertical"
+  android:paddingBottom="@dimen/filtered_tag_view_top_padding"
+  android:paddingLeft="@dimen/filtered_tag_view_side_padding"
+  android:paddingRight="@dimen/filtered_tag_view_side_padding"
+  android:paddingTop="@dimen/filtered_tag_view_top_padding"
+  android:singleLine="true"
+  android:textColor="@color/white"
+  android:textSize="@dimen/filtered_tag_textSize" />
 
-  <TextView
-    android:id="@+id/tag_label"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical"
-    android:singleLine="true"
-    android:textColor="@color/white"
-    android:textSize="@dimen/filtered_tag_textSize" />
 
-  <TextView
-    android:id="@+id/tag_delete"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical"
-    android:paddingLeft="@dimen/activity_margin"
-    android:singleLine="true"
-    android:text="@string/tag_delete"
-    android:textColor="@color/white"
-    android:textSize="@dimen/filtered_tag_textSize" />
-
-</LinearLayout>
