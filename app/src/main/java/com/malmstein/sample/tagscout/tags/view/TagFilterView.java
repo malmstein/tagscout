@@ -117,7 +117,7 @@ public class TagFilterView extends RelativeLayout {
         int indexHeader = 1;
 
         for (Tag tag : displayer.getTags()) {
-            View tagLayout = createTagLayout(listIndex, tag);
+            TextView tagLayout = createTagLayout(listIndex, tag);
             LayoutParams tagParams;
 
             float tagWidth = computeTagWidth(tagLayout);
@@ -141,25 +141,16 @@ public class TagFilterView extends RelativeLayout {
         }
     }
 
-    private float computeTagWidth(View tagLayout) {
-        TextView tagText = (TextView) tagLayout.findViewById(R.id.tag_label);
-        TextView deletableView = (TextView) tagLayout.findViewById(R.id.tag_delete);
-
-        float tagTextWidth = tagText.getPaint().measureText(tagText.getText().toString()) + defaultPadding + offset;
-        float tagCrossWidth = deletableView.getPaint().measureText(deletableView.getText().toString()) + defaultPadding + defaultPadding;
-        float tagWidth = tagTextWidth + tagCrossWidth;
-
+    private float computeTagWidth(TextView tagLayout) {
+        float tagWidth = tagLayout.getPaint().measureText(tagLayout.getText().toString()) + defaultPadding + offset + defaultPadding;
         return tagWidth;
     }
 
-    public View createTagLayout(int listIndex, final Tag tag) {
-        View tagLayout = layoutInflater.inflate(R.layout.view_tag_filter, null);
+    public TextView createTagLayout(int listIndex, final Tag tag) {
+        TextView tagLayout = (TextView) layoutInflater.inflate(R.layout.view_tag_filter, null);
         tagLayout.setId(listIndex);
         tagLayout.setBackground(getSelector(tag));
-
-        TextView tagView = (TextView) tagLayout.findViewById(R.id.tag_label);
-        tagView.setText(tag.getTag());
-
+        tagLayout.setText(String.format(getResources().getString(R.string.tag_filter_text), tag.getTag()));
         tagLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

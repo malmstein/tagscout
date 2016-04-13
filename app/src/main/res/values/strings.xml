@@ -3,6 +3,6 @@
 
   <string name="title_add_tags">Add Tags</string>
 
-  <string name="tag_delete">X</string>
+  <string name="tag_filter_text">%s X</string>
   <string name="tag_search_hint">Search</string>
 </resources>
